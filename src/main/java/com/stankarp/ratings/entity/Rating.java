@@ -4,6 +4,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Rating extends ResourceSupport {
@@ -94,5 +95,39 @@ public class Rating extends ResourceSupport {
 
     public void setAlbum(Album album) {
         this.album = album;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Rating rating = (Rating) o;
+        return Objects.equals(ratingId, rating.ratingId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), ratingId);
+    }
+
+    public String getUserName() {
+        return this.user.getUsername();
+    }
+
+    public String getTitle() {
+        return this.album.getTitle();
+    }
+
+    public String getName() {
+        return this.album.getName();
+    }
+
+    public Long getPerformerId() {
+        return album.getPerformer().getPerformerId();
+    }
+
+    public Long getAlbumId() {
+        return album.getAlbumId();
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -97,5 +98,31 @@ public class Album extends ResourceSupport {
 
     public Integer getRatingsCount() {
         return ratings.size();
+    }
+
+    public String getName() {
+        return performer.getName();
+    }
+
+    public void addRating(Rating rating) {
+        ratings.add(rating);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Album album = (Album) o;
+        return Objects.equals(albumId, album.albumId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), albumId);
+    }
+
+    public Long getPerformerId() {
+        return performer.getPerformerId();
     }
 }

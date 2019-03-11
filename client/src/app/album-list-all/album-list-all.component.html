@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-title>Album List</mat-card-title>
+  <mat-card-content>
+
+    <div class="example-loading-shade"
+      *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        GitHub's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    <app-album-list 
+      [albums]="albums"
+      [resultsLength]="resultsLength"
+      [size]="10"
+      matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
+    </app-album-list>
+    
+  </mat-card-content>
+</mat-card>
+      

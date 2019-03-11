@@ -5,6 +5,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -58,5 +59,19 @@ public class Role extends ResourceSupport {
     }
 
     public Role() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Role role = (Role) o;
+        return Objects.equals(roleId, role.roleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), roleId);
     }
 }

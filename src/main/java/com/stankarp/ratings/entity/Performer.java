@@ -5,6 +5,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -81,5 +82,23 @@ public class Performer extends ResourceSupport {
     public Double getAverage() {
         return albums.stream().flatMap(album -> album.getRatings().stream())
                 .mapToDouble(Rating::getRate).average().orElse(0.0);
+    }
+
+    public void addAlbum(Album album) {
+        albums.add(album);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Performer performer = (Performer) o;
+        return Objects.equals(performerId, performer.performerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), performerId);
     }
 }

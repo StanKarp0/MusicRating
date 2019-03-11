@@ -2,12 +2,21 @@ package com.stankarp.ratings;
 
 import com.stankarp.ratings.entity.*;
 import com.stankarp.ratings.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,11 +29,33 @@ import java.util.stream.Stream;
 @SpringBootApplication
 public class RatingsApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(RatingsApplication.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(RatingsApplication.class, args);
 	}
 
-	@Bean
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://localhost:4200");
+            }
+        };
+    }
+
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
+
+    String randomString( int len ){
+        StringBuilder sb = new StringBuilder( len );
+        for( int i = 0; i < len; i++ )
+            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+        return sb.toString();
+    }
+
+    @Bean
 	ApplicationRunner init(AlbumRepository albumRepository, PerformerRepository performerRepository,
                            RatingRepository ratingRepository, RoleRepository roleRepository,
                            UserRepository userRepository) {
@@ -41,6 +72,7 @@ public class RatingsApplication {
             User user1 = new User("admin", "admin");
             User user2 = new User("admin-user", "admin");
             User user3 = new User("user", "admin");
+            List<User> users = Stream.of(user1, user2, user3).collect(Collectors.toList());
 
             user1.setRoles(Stream.of(role1).collect(Collectors.toSet()));
             user2.setRoles(Stream.of(role1, role2).collect(Collectors.toSet()));
@@ -53,34 +85,34 @@ public class RatingsApplication {
             // PERFORMERS
             Performer performer1 = new Performer("The Beatles");
             Performer performer2 = new Performer("Neil Young");
+            Performer performer3 = new Performer("Pink Floyd");
+            Performer performer4 = new Performer("Cure");
+            List<Performer> performers = Stream.of(performer1, performer2, performer3, performer4)
+                    .collect(Collectors.toList());
 
             performerRepository.save(performer1);
             performerRepository.save(performer2);
+            performerRepository.save(performer3);
+            performerRepository.save(performer4);
 
             // ALBUMS
-            Album album1 = new Album("Revolver", 1966, performer1);
-            Album album2 = new Album("White Album", 1969, performer1);
-            Album album3 = new Album("Harvest", 1972, performer2);
-            Album album4 = new Album("On the Beach", 1974, performer2);
-            Album album5 = new Album("On the Sand", 1970, performer2);
+            for (int i = 0; i < 50; i++) {
+                String title = randomString(10);
+                Performer performer = performers.get(rnd.nextInt(performers.size()));
+                Album album = new Album(title, rnd.nextInt(50) + 1950, performer);
+                albumRepository.save(album);
+                performer.addAlbum(album);
 
-            albumRepository.save(album1);
-            albumRepository.save(album2);
-            albumRepository.save(album3);
-            albumRepository.save(album4);
-            albumRepository.save(album5);
+                for (int j = 0; j < rnd.nextInt(3); j ++) {
+                    User user = users.get(rnd.nextInt(users.size()));
+                    Rating rating = new Rating(user, rnd.nextDouble() * 10., "", album);
+                    ratingRepository.save(rating);
+                    album.addRating(rating);
+                }
+                albumRepository.save(album);
+                performerRepository.save(performer);
 
-            // RATINGS
-            ratingRepository.save(new Rating(user1, 9.0, "", album1));
-            ratingRepository.save(new Rating(user1, 8.0, "", album2));
-            ratingRepository.save(new Rating(user1, 7.0, "", album3));
-//            ratingRepository.save(new Rating(user1, 6.0, "", album4));
-            ratingRepository.save(new Rating(user2, 5.0, "", album1));
-            ratingRepository.save(new Rating(user2, 4.0, "", album2));
-            ratingRepository.save(new Rating(user2, 3.0, "", album3));
-            ratingRepository.save(new Rating(user3, 2.0, "", album1));
-            ratingRepository.save(new Rating(user3, 1.0, "", album2));
-
+            }
         };
 	}
 

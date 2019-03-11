@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
-import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RepositoryRestResource
+@CrossOrigin(origins = "http://localhost:4200")
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Page<Album> findByYearBetween(Integer year1, Integer year2, Pageable pageable);
@@ -25,4 +26,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Integer> findDistinctByYearBetween(Integer year1, Integer year2);
 
     Album findByAlbumId(Long albumId);
+
+    @RestResource()
+    @Query("SELECT a FROM Album a WHERE UPPER(a.title) LIKE CONCAT('%',UPPER(?1),'%') or UPPER(a.performer.name) LIKE CONCAT('%',UPPER(?1),'%')")
+    Page<Album> findByQuery(String query, Pageable pageable);
+
 }

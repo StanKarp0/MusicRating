@@ -4,6 +4,8 @@ import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.service.AlbumService;
 import com.stankarp.ratings.utils.YearRangeHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -22,6 +25,8 @@ public class RandomController {
     private AlbumService albumService;
 
     private RepositoryEntityLinks entityLinks;
+
+    private static final Logger logger = LoggerFactory.getLogger(RandomController.class);
 
     public RandomController(AlbumService albumService, RepositoryEntityLinks entityLinks) {
         this.albumService = albumService;
@@ -69,10 +74,16 @@ public class RandomController {
     }
 
     private Resources<Album> addLinks(Collection<Album> albums, Integer decade) {
+        albums.forEach(r -> logger.info(r.toString()));
+
         Resources<Album> resource = addLinks(albums);
+
+        resource.forEach(r -> logger.info(r.toString()));
 
         for(Integer year: albumService.findYears(decade))
             resource.add(linkTo(methodOn(RandomController.class).year(year)).withRel("year_" + year));
+
+        logger.info("----------");
 
         return resource;
     }

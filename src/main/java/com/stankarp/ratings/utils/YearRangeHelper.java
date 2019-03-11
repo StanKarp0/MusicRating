@@ -45,7 +45,7 @@ public class YearRangeHelper {
                 return false;
         }
         if (upper != null) {
-            return year < upper;
+            return year <= upper;
         }
         return true;
     }
