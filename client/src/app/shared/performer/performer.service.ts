@@ -28,7 +28,7 @@ export class PerformerService {
     } else {
       return this.http.get<PerformerList>(this.URL_SEARCH, {
         params: {
-          name: query,
+          query: query,
           size: pageSize.toString(),
           page: pageIndex.toString()
         }
@@ -40,7 +40,7 @@ export class PerformerService {
     return this.http.get<Performer>(this.URL_PERFORMERS + '/' + id);
   }
 
-  save(performer: any): Observable<Object> {
+  save(performer: Performer): Observable<Object> {
     let result: Observable<Object>;
     if (performer['href']) {
       console.log('Put performer', performer.href, performer);

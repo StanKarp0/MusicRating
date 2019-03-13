@@ -42,7 +42,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           if (user) {
             this.user = user;
             this.getRatings()
-
           } else {
             console.log(`User with id '${username}' not found, returning to list`);
           }

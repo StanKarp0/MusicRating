@@ -1,3 +1,11 @@
+<div class="example-loading-shade"
+  *ngIf="isLoadingResults || isRateLimitReached">
+  <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+    API rate limit has been reached. It will be reset in one minute.
+  </div>
+</div>
+
 <table mat-table
        [dataSource]="albums" multiTemplateDataRows
        matSort matSortActive="created" matSortDisableClear matSortDirection="desc"
@@ -12,12 +20,10 @@
       <td mat-cell *matCellDef="let album" [attr.colspan]="columnsToDisplay.length">
           <div class="example-element-detail"
                [@detailExpand]="album == expandedElement ? 'expanded' : 'collapsed'">
-               <a mat-button [routerLink]="['/performer', album.performerId, 'details']">{{album.name}}</a>
-               <a mat-button [routerLink]="['/albums/year', album.year]">{{album.year}}</a>
-               <a mat-button [routerLink]="['/albums/decade', album.decade]">{{album.decade}}0's</a>
+               <button mat-button [routerLink]="['/performer', album.performerId, 'details']">{{album.name}}</button>
+               <button mat-button [routerLink]="['/album', album.albumId, 'details']">Details</button>
                
                <button mat-button [routerLink]="['/album', album.albumId, 'rate']">Rate</button>
-               <button mat-button [routerLink]="['/album', album.albumId, 'ratings']">Ratings</button>
                <button mat-button [routerLink]="['/album', album.albumId, 'edit']">Edit</button>
                <button mat-button [routerLink]="['/album', album.albumId, 'delete']">Remove</button>
           </div>

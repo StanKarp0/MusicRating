@@ -31,6 +31,12 @@ export class RatingsListComponent implements OnInit {
   ratings: Rating[];
 
   @Input()
+  isLoadingResults: boolean = false;
+
+  @Input()
+  isRateLimitReached: boolean = false;
+
+  @Input()
   resultsLength: number = 0;
 
   @Output() changed = new EventEmitter<any>();

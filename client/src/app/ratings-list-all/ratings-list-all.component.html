@@ -2,17 +2,11 @@
   <mat-card-title>Ratings</mat-card-title>
   <mat-card-content>
 
-    <div class="example-loading-shade"
-      *ngIf="isLoadingResults || isRateLimitReached">
-      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-        GitHub's API rate limit has been reached. It will be reset in one minute.
-      </div>
-    </div>
-
     <app-ratings-list 
       [resultsLength]="resultsLength" 
-      [ratings]="ratings">
+      [ratings]="ratings"
+      [isLoadingResults]="isLoadingResults" 
+      [isRateLimitReached]="isRateLimitReached">
     </app-ratings-list>
   
   </mat-card-content>

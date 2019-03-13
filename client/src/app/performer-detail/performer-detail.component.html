@@ -4,7 +4,9 @@
       <app-album-list 
         [albums]="albums"
         [resultsLength]="resultsLength"
-        [size]="pageSize">
+        [size]="pageSize"
+        [isLoadingResults]="isLoadingResults" 
+        [isRateLimitReached]="isRateLimitReached">
       </app-album-list>
   </mat-card-content>
 </mat-card>

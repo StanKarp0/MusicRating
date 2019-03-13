@@ -17,7 +17,7 @@ export class PerformerDetailComponent implements OnInit {
   albums: Album[];
 
   resultsLength = 0;
-  isLoadingResults = true;
+  isLoadingResults = false;
   isRateLimitReached = false;
 
   pageSize = 10
@@ -34,7 +34,10 @@ export class PerformerDetailComponent implements OnInit {
   @Input() 
   set performer(performer: Performer) {
     this._performer = performer;
-    this.performerChanged.emit(null)
+    this.albumList.paginator.pageIndex = 0;
+    if (performer) {
+      this.performerChanged.emit(null);
+    }
   }
 
   ngOnInit() { }

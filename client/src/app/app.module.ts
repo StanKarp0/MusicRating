@@ -19,6 +19,7 @@ import { RatingsListComponent } from './ratings-list/ratings-list.component';
 import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { PerformerDetailAllComponent } from './performer-detail-all/performer-detail-all.component';
+import { AlbumDetailComponent } from './album-detail/album-detail.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PerformerDetailAllComponent } from './performer-detail-all/performer-de
     RatingsListComponent,
     RatingsListAllComponent,
     UserDetailComponent,
-    PerformerDetailAllComponent
+    PerformerDetailAllComponent,
+    AlbumDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -36,6 +36,12 @@ export class AlbumListComponent implements OnInit {
   @Input()
   size: number = 0;
 
+  @Input()
+  isLoadingResults: boolean = false;
+
+  @Input()
+  isRateLimitReached: boolean = false;
+
   @Output() changed = new EventEmitter<any>();
 
   @Output()

@@ -1,6 +1,5 @@
 <mat-card>
-    <!-- *ngIf="user" -->
-  <mat-card-title *ngIf="user">{{user.username}}</mat-card-title>
+  <mat-card-title *ngIf="album">{{album.title}} {{album.name}} {{album.year}}</mat-card-title>
   <mat-card-content>
 
     <app-ratings-list 
