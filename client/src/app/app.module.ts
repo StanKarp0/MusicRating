@@ -18,6 +18,7 @@ import { AlbumListRandomComponent } from './album-list-random/album-list-random.
 import { RatingsListComponent } from './ratings-list/ratings-list.component';
 import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
+import { PerformerDetailAllComponent } from './performer-detail-all/performer-detail-all.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
     AlbumListRandomComponent,
     RatingsListComponent,
     RatingsListAllComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    PerformerDetailAllComponent
   ],
   imports: [
     BrowserModule,

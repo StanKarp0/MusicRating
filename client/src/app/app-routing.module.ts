@@ -6,6 +6,7 @@ import { AlbumListAllComponent } from './album-list-all/album-list-all.component
 import { AlbumListRandomComponent } from './album-list-random/album-list-random.component';
 import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
+import { PerformerDetailAllComponent } from './performer-detail-all/performer-detail-all.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/random', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'random', component: AlbumListRandomComponent },
   
   // details
-  { path: 'user/:userName', component: UserDetailComponent},
+  { path: 'user/:username', component: UserDetailComponent},
+  { path: 'performer/:performerId/details', component: PerformerDetailAllComponent},
 
   // add
   { path: 'album/add', component: AlbumEditComponent },

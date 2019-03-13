@@ -10,11 +10,16 @@ export class UserService {
 
   public API = '//localhost:8080';
   private URL_USERS = this.API + '/users';
+  private URL_FIND = this.URL_USERS + '/search/findByUsername';
 
   constructor(private http: HttpClient) { }
 
-  getByUserName(userName: string): Observable<User> {
-    throw new Error("Method not implemented.");
+  getByUserName(username: string): Observable<User> {
+    return this.http.get<User>(this.URL_FIND, {
+      params: {
+        username: username
+      }
+    })
   }
 
 }

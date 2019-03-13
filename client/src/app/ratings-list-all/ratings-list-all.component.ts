@@ -33,7 +33,8 @@ export class RatingsListAllComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.ratingService.findByPage(this.ratingsList.pageSize, this.ratingsList.pageIndex);
+          return this.ratingService.findByPage(
+            this.ratingsList.pageSize, this.ratingsList.pageIndex);
         }),
         map(data => {
           this.isLoadingResults = false;

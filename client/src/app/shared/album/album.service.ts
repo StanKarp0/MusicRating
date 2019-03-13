@@ -12,21 +12,27 @@ export class AlbumService {
   public API = '//localhost:8080';
   private URL_ALBUMS = this.API + '/albums';
   private URL_SEARCH = this.URL_ALBUMS + '/search/findByQuery';
+  private URL_PERFORMER = this.URL_ALBUMS + '/search/findByPerformerId'
   private URL_RANDOM = this.API
 
   constructor(private http: HttpClient) { }
 
-  findByPage(pageSize: number, pageIndex: number): Observable<AlbumList> {
+  findByPage(size: number, page: number): Observable<AlbumList> {
     return this.http.get<AlbumList>(this.URL_ALBUMS, {
       params:{
-        size: pageSize.toString(),
-        page: pageIndex.toString(),
+        size: size.toString(),
+        page: page.toString(),
       }});
   }
 
-  findByPerformer(performer: Performer): Observable<AlbumList> {
-    const url = performer._links.albums.href;
-    return this.http.get<AlbumList>(url);
+  findByPerformer(performer: Performer, size: number, page: number): Observable<AlbumList> {
+    return this.http.get<AlbumList>(this.URL_PERFORMER, {
+      params: {
+        performerId: performer.performerId.toString(),
+        size: size.toString(),
+        page: page.toString(),
+      }
+    });
   }
 
   findByQuery(filterValue: string, size: number, page: number): Observable<AlbumList> {

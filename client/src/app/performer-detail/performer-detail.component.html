@@ -1,15 +1,10 @@
-<div *ngIf="_performer">
-  <mat-card>
-    <mat-card-title>{{_performer.name}}</mat-card-title>
-    <mat-card-content>
-        <app-album-list 
-          [albums]="albums"
-          [resultsLength]="resultsLength"
-          [size]="pageSize">
-        </app-album-list>
-    </mat-card-content>
-  </mat-card>
-
-  
-
-</div>
+<mat-card>
+  <mat-card-title *ngIf="_performer">{{_performer.name}}</mat-card-title>
+  <mat-card-content>
+      <app-album-list 
+        [albums]="albums"
+        [resultsLength]="resultsLength"
+        [size]="pageSize">
+      </app-album-list>
+  </mat-card-content>
+</mat-card>

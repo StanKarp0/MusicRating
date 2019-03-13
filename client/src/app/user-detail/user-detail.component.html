@@ -1,3 +1,20 @@
-<p>
-  user-detail works!
-</p>
+<mat-card>
+    <!-- *ngIf="user" -->
+  <mat-card-title *ngIf="user">{{user.username}}</mat-card-title>
+  <mat-card-content>
+
+    <div class="example-loading-shade"
+      *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        GitHub's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+
+    <app-ratings-list 
+      [resultsLength]="resultsLength" 
+      [ratings]="ratings">
+    </app-ratings-list>
+  
+  </mat-card-content>
+</mat-card>

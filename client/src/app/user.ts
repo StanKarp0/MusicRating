@@ -1,6 +1,6 @@
 export class User {
 
-    userName?: string;
+    username?: string;
 
     _links?: {
         roles: Object;

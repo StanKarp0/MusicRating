@@ -36,7 +36,7 @@ export class PerformerService {
     }
   }
 
-  get(id: string): Observable<Performer> {
+  getById(id: string): Observable<Performer> {
     return this.http.get<Performer>(this.URL_PERFORMERS + '/' + id);
   }
 

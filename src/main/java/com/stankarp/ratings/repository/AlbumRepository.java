@@ -31,4 +31,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query("SELECT a FROM Album a WHERE UPPER(a.title) LIKE CONCAT('%',UPPER(?1),'%') or UPPER(a.performer.name) LIKE CONCAT('%',UPPER(?1),'%')")
     Page<Album> findByQuery(String query, Pageable pageable);
 
+
+    @RestResource()
+    @Query("SELECT a FROM Album a WHERE a.performer.performerId=?1")
+    Page<Album> findByPerformerId(Long performerId, Pageable pageable);
+
 }
