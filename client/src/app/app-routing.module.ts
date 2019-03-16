@@ -8,6 +8,9 @@ import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.com
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { PerformerDetailAllComponent } from './performer-detail-all/performer-detail-all.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
+import { PerformerEditComponent } from './performer-edit/performer-edit.component';
+import { PerformerAddComponent } from './performer-add/performer-add.component';
+import { RatingEditComponent } from './rating-edit/rating-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/random', pathMatch: 'full' },
@@ -23,10 +26,14 @@ const routes: Routes = [
   { path: 'album/:albumId/details', component: AlbumDetailComponent},
 
   // add
-  { path: 'album/add', component: AlbumEditComponent },
+  { path: 'performer/:performerId/add', component: AlbumEditComponent },
+  { path: 'performer/add', component: PerformerAddComponent },
+  { path: 'album/:albumId/rate', component: RatingEditComponent },
 
   // edit
-  { path: 'album/:id/edit', component: AlbumEditComponent }
+  { path: 'performer/:performerId/edit', component: PerformerEditComponent },
+  { path: 'album/:albumId/edit', component: AlbumEditComponent },
+  { path: 'rating/:ratingId/edit', component: RatingEditComponent },
 ];
 
 @NgModule({

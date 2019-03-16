@@ -40,16 +40,8 @@ export class PerformerService {
     return this.http.get<Performer>(this.URL_PERFORMERS + '/' + id);
   }
 
-  save(performer: Performer): Observable<Object> {
-    let result: Observable<Object>;
-    if (performer['href']) {
-      console.log('Put performer', performer.href, performer);
-      result = this.http.put(performer.href, performer);
-    } else {
-      console.log('Post performer', this.URL_PERFORMERS, performer);
-      result = this.http.post(this.URL_PERFORMERS, performer);
-    }
-    return result;
+  save(performerForm: Performer): Observable<Performer> {
+    return this.http.post(this.URL_PERFORMERS, performerForm);
   }
 
   remove(href: string) {

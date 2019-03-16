@@ -24,6 +24,8 @@
                <button mat-button [routerLink]="['/user', rating.userName]">{{rating.userName}}</button>
                <button mat-button [routerLink]="['/album', rating.albumId, 'details']">{{rating.title}}</button>
                <button mat-button [routerLink]="['/performer', rating.performerId, 'details']">{{rating.name}}</button>
+               <button mat-button [routerLink]="['/rating', rating.ratingId, 'edit']">Edit</button>
+               <button mat-button (click)="remove(rating)">Remove</button>
           </div>
         </td>
     </ng-container>

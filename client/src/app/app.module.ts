@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { MatButtonModule, MatCardModule, MatInputModule, MatListModule, MatToolbarModule, MatMenuModule, MatProgressSpinnerModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatInputModule, MatListModule, MatToolbarModule, MatMenuModule, MatProgressSpinnerModule, MatPaginatorModule, MatSortModule, MatSliderModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,10 @@ import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.com
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { PerformerDetailAllComponent } from './performer-detail-all/performer-detail-all.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
+import { PerformerEditComponent } from './performer-edit/performer-edit.component';
+import { PerformerEditorComponent } from './performer-editor/performer-editor.component';
+import { PerformerAddComponent } from './performer-add/performer-add.component';
+import { RatingEditComponent } from './rating-edit/rating-edit.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,11 @@ import { AlbumDetailComponent } from './album-detail/album-detail.component';
     RatingsListAllComponent,
     UserDetailComponent,
     PerformerDetailAllComponent,
-    AlbumDetailComponent
+    AlbumDetailComponent,
+    PerformerEditComponent,
+    PerformerEditorComponent,
+    PerformerAddComponent,
+    RatingEditComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +61,8 @@ import { AlbumDetailComponent } from './album-detail/album-detail.component';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatSortModule,
+    ReactiveFormsModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

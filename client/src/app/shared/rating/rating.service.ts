@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RatingList } from 'src/app/rating';
+import { RatingList, Rating } from 'src/app/rating';
 import { User } from 'src/app/user';
 import { Album } from 'src/app/album';
+import { NgForm } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,14 @@ export class RatingService {
         page: page.toString()      
       }
     })
+  }
+
+  save(rating: NgForm): any {
+    return this.http.post(this.URL_RATINGS, rating);
+  }
+
+  get(ratingId: string): Observable<Rating> {
+    return this.http.get<Rating>(this.URL_RATINGS + '/' + ratingId);
   }
 
 }

@@ -1,8 +1,11 @@
 package com.stankarp.ratings.service.impl;
 
 import com.stankarp.ratings.entity.Album;
+import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.repository.AlbumRepository;
+import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.AlbumService;
+import com.stankarp.ratings.service.forms.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +24,11 @@ public class AlbumServiceImpl implements AlbumService {
 
     private AlbumRepository albumRepository;
 
-    public AlbumServiceImpl(AlbumRepository albumRepository) {
+    private PerformerRepository performerRepository;
+
+    public AlbumServiceImpl(AlbumRepository albumRepository, PerformerRepository performerRepository) {
         this.albumRepository = albumRepository;
+        this.performerRepository = performerRepository;
     }
 
     @Override
@@ -55,7 +62,23 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Album findOne(Long albumId) {
-        return albumRepository.findByAlbumId(albumId);
+    public Optional<Album> findOne(Long albumId) {
+        return Optional.ofNullable(albumRepository.getOne(albumId));
+    }
+
+    @Override
+    public Optional<Album> save(AlbumForm albumForm) {
+
+        return Optional.ofNullable(albumForm.getAlbumId())
+                .map(albumRepository::getOne)
+                .map(album -> {
+                    album.setTitle(albumForm.getTitle());
+                    album.setYear(albumForm.getYear());
+                    return album;})
+                .map(Optional::of)
+                .orElse(Optional.ofNullable(albumForm.getPerformerId())
+                        .map(performerRepository::getOne)
+                        .map(performer -> new Album(albumForm.getTitle(), albumForm.getYear(), performer)))
+                .map(albumRepository::save);
     }
 }

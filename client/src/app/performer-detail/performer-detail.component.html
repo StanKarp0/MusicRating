@@ -1,5 +1,12 @@
 <mat-card>
   <mat-card-title *ngIf="_performer">{{_performer.name}}</mat-card-title>
+
+  <mat-card-actions *ngIf="_performer">
+      <button mat-button [routerLink]="['/performer', _performer.performerId, 'edit']">Edit</button>
+      <button mat-button [routerLink]="['/performer', _performer.performerId, 'add']">Add album</button>
+      <button mat-button (click)="remove()">Remove</button>
+  </mat-card-actions>
+
   <mat-card-content>
       <app-album-list 
         [albums]="albums"
@@ -9,4 +16,6 @@
         [isRateLimitReached]="isRateLimitReached">
       </app-album-list>
   </mat-card-content>
+
+
 </mat-card>

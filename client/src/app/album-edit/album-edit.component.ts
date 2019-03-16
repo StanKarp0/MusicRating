@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AlbumEditComponent implements OnInit, OnDestroy {
 
   album: Album = new Album();
-
+  newAlbum: boolean = true;
   subscription: Subscription;
 
   constructor(
@@ -24,17 +24,21 @@ export class AlbumEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.subscription = this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.albumService.get(id).subscribe((album: Album) => {
+      const albumId = params['albumId'];
+      const performerId = params['performerId']
+
+      if (albumId) {
+        this.albumService.get(albumId).subscribe((album: Album) => {
           if (album) {
             this.album = album;
-            this.album.href = album._links['self']['href'];
+            this.newAlbum = false;
           } else {
-            console.log(`Car with id '${id}' not found, returning to list`);
-            this.gotoList();
+            console.log(`Album with id '${albumId}' not found, returning to list`);
+            this.goBack()
           }
         });
+      } else if (performerId) {
+        this.album.performerId = performerId;
       }
     });
   }
@@ -43,19 +47,16 @@ export class AlbumEditComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  gotoList() {
-    this.router.navigate(['/albums']);
+  goBack() {
+    this.router.navigate(['/album', this.album.albumId, 'details']);
   }
 
   save(form: NgForm) {
-    this.albumService.save(form).subscribe(result => {
-      this.gotoList();
+    console.log(form);
+    this.albumService.save(form).subscribe(album => {
+      this.album = album;
+      this.goBack();
     }, error => console.error(error));
   }
 
-  remove(href: string) {
-    this.albumService.remove(href).subscribe(result => {
-      this.gotoList();
-    }, error => console.error(error));
-  }
 }

@@ -1,7 +1,11 @@
 <mat-card>
-  <mat-card-title>Performer List</mat-card-title>
-  <mat-card-content>
+  <mat-card-title>Artists List</mat-card-title>
 
+  <mat-card-actions>
+      <a mat-button routerLink="performer/add">Add artist</a>
+  </mat-card-actions>
+
+  <mat-card-content>
     <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
       </mat-form-field>

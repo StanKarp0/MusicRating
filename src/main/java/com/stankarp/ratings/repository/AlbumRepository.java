@@ -25,8 +25,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query("SELECT DISTINCT a.year FROM Album a WHERE a.year between ?1 and ?2 ORDER BY a.year")
     List<Integer> findDistinctByYearBetween(Integer year1, Integer year2);
 
-    Album findByAlbumId(Long albumId);
-
     @RestResource()
     @Query("SELECT a FROM Album a WHERE UPPER(a.title) LIKE CONCAT('%',UPPER(?1),'%') or UPPER(a.performer.name) LIKE CONCAT('%',UPPER(?1),'%')")
     Page<Album> findByQuery(String query, Pageable pageable);

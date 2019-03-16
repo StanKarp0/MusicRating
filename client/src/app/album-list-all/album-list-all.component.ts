@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { Album } from '../album';
 import { AlbumService } from '../shared/album/album.service';
-import { MatSort, MatPaginator } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { AlbumListComponent } from '../album-list/album-list.component';
@@ -59,8 +58,11 @@ export class AlbumListAllComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    this.query = filterValue;
-    this.queryChanged.emit(null);
+    if (this.query != filterValue) {
+      this.query = filterValue;
+      this.albumList.paginator.pageIndex = 0
+      this.queryChanged.emit(null);
+    }
   }
 
 }

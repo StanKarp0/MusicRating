@@ -42,7 +42,6 @@ export class PerformerListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     merge(this.sort.sortChange, this.paginator.page, this.queryChanged)
       .pipe(
         startWith({}),
@@ -68,8 +67,11 @@ export class PerformerListComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    this.query = filterValue;
-    this.queryChanged.emit(null);
+    if (this.query != filterValue) {
+      this.query = filterValue;
+      this.paginator.pageIndex = 0
+      this.queryChanged.emit(null);
+    }
     
   }
 

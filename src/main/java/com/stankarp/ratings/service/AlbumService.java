@@ -1,12 +1,14 @@
 package com.stankarp.ratings.service;
 
 import com.stankarp.ratings.entity.Album;
+import com.stankarp.ratings.service.forms.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface AlbumService {
 
@@ -18,5 +20,7 @@ public interface AlbumService {
 
     List<Integer> findYears(Integer decade);
 
-    Album findOne(Long albumId);
+    Optional<Album> findOne(Long albumId);
+
+    Optional<Album> save(AlbumForm album);
 }

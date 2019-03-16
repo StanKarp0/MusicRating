@@ -61,19 +61,11 @@ export class AlbumService {
     return this.http.get<Album>(this.URL_ALBUMS + '/' + id);
   }
 
-  save(album: any): Observable<Object> {
-    let result: Observable<Object>;
-    if (album['href']) {
-      console.log('Put album', album.href, album);
-      result = this.http.put(album.href, album);
-    } else {
-      console.log('Post album', this.URL_ALBUMS, album);
-      result = this.http.post(this.URL_ALBUMS, album);
-    }
-    return result;
+  save(album: Album): Observable<Album> {
+    return this.http.post(this.URL_ALBUMS, album);
   }
 
-  remove(href: string) {
-    return this.http.delete(href);
+  remove(album: Album) {
+    return this.http.delete(album.href);
   }
 }
