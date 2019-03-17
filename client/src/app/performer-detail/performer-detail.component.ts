@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { Performer } from '../performer';
 import { AlbumService } from '../shared/album/album.service';
 import { Album, AlbumList } from '../album';
@@ -26,6 +26,9 @@ export class PerformerDetailComponent implements OnInit {
   @ViewChild(AlbumListComponent) albumList: AlbumListComponent;
   
   performerChanged = new EventEmitter<any>();
+
+  @Output()
+  albumListChanged = new EventEmitter<any>();
 
   constructor(
     private albumService: AlbumService
@@ -66,6 +69,19 @@ export class PerformerDetailComponent implements OnInit {
     ).subscribe(albums => {
       this.albums = albums      
     });
-  }
 
+    this.albumList.deleteClicked.pipe(
+      switchMap((album: Album) => {
+        return this.albumService.remove(album);
+      }),
+      catchError((e) => {
+        console.error('Error', e)
+        return observableOf({});
+      })
+    ).subscribe((result) => {
+      this.performerChanged.emit(null)
+      this.albumListChanged.emit(null)
+    })
+
+  }
 }

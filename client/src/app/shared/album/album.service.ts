@@ -66,6 +66,8 @@ export class AlbumService {
   }
 
   remove(album: Album) {
-    return this.http.delete(album.href);
+    const href = album._links.album.href; 
+    console.log('remove', href, album);
+    return this.http.delete(href);
   }
 }

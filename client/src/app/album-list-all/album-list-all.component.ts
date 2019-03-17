@@ -55,6 +55,19 @@ export class AlbumListAllComponent implements OnInit {
       ).subscribe(albums => {
         this.albums = albums      
       });
+
+      this.albumList.deleteClicked.pipe(
+        switchMap((album: Album) => {
+          return this.albumService.remove(album);
+        }),
+        catchError((e) => {
+          console.error('Error Deleting', e)
+          return observableOf({});
+        })
+      ).subscribe((result) => {
+        this.queryChanged.emit(null)
+      })
+
   }
 
   applyFilter(filterValue: string) {

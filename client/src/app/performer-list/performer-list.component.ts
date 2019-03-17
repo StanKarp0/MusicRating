@@ -5,6 +5,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { PerformerDetailComponent } from '../performer-detail/performer-detail.component';
 
 @Component({
   selector: 'app-performer-list',
@@ -33,6 +34,7 @@ export class PerformerListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(PerformerDetailComponent) performerDetail: PerformerDetailComponent;
 
   constructor(
     private performerService: PerformerService
@@ -42,7 +44,7 @@ export class PerformerListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    merge(this.sort.sortChange, this.paginator.page, this.queryChanged)
+    merge(this.sort.sortChange, this.paginator.page, this.queryChanged, this.performerDetail.albumListChanged)
       .pipe(
         startWith({}),
         switchMap(() => {

@@ -4,7 +4,7 @@ import { Rating } from '../rating';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { RatingsListComponent } from '../ratings-list/ratings-list.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlbumService } from '../shared/album/album.service';
 import { RatingService } from '../shared/rating/rating.service';
 
@@ -30,6 +30,7 @@ export class AlbumDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private albumService: AlbumService,
     private ratingService: RatingService
   ) { }
@@ -73,6 +74,16 @@ export class AlbumDetailComponent implements OnInit {
     ).subscribe(ratings => {
       this.ratings = ratings      
     });
-}
+  }
+
+  remove() {
+    this.albumService.remove(this.album).subscribe(result => {
+      this.gotoPerformer()
+    });
+  }
+
+  gotoPerformer() {
+    this.router.navigate(['/performer', this.album.performerId, 'details']);
+  }
 
 }

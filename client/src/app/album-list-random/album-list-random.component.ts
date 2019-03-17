@@ -34,7 +34,7 @@ export class AlbumListRandomComponent implements OnInit {
 
 
   ngAfterViewInit(): void {
-    merge(this.reloadClicked)
+    this.reloadClicked
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -83,6 +83,18 @@ export class AlbumListRandomComponent implements OnInit {
           }
         }
     });
+
+    this.albumList.deleteClicked.pipe(
+      switchMap((album: Album) => {
+        return this.albumService.remove(album);
+      }),
+      catchError((e) => {
+        console.error('Error Deleting', e)
+        return observableOf({});
+      })
+    ).subscribe((result) => {
+      this.refresh()
+    })
   }
 
   refresh() {

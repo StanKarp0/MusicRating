@@ -62,7 +62,7 @@ export class RatingEditComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
-    console.log(form);
+    console.log('save rating', form);
     this.ratingService.save(form).subscribe(result => {
       this.goBack();
     }, error => console.error(error));

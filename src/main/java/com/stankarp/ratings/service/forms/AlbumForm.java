@@ -1,8 +1,5 @@
 package com.stankarp.ratings.service.forms;
 
-import javax.persistence.Entity;
-import java.util.Optional;
-
 public class AlbumForm {
 
     private String title;

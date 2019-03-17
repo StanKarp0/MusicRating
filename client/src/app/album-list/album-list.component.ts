@@ -42,7 +42,11 @@ export class AlbumListComponent implements OnInit {
   @Input()
   isRateLimitReached: boolean = false;
 
-  @Output() changed = new EventEmitter<any>();
+  @Output() 
+  changed = new EventEmitter<any>();
+
+  @Output() 
+  deleteClicked = new EventEmitter<Album>();
 
   @Output()
   get pageSize(): number {
@@ -64,5 +68,9 @@ export class AlbumListComponent implements OnInit {
     .subscribe(() => {
       this.changed.emit(null);      
     });
+  }
+
+  remove(album: Album) {
+    this.deleteClicked.emit(album);
   }
 }

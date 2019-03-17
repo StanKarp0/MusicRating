@@ -13,6 +13,7 @@ export class RatingService {
 
   public API = '//localhost:8080';
   private URL_RATINGS = this.API + '/ratings';
+  private URL_RATINGS_SAVE = this.URL_RATINGS + '/save';
   private URL_FIND_USER = this.URL_RATINGS + '/search/username';
   private URL_FIND_ALBUM = this.URL_RATINGS + '/search/findByAlbum';
 
@@ -47,7 +48,7 @@ export class RatingService {
   }
 
   save(rating: NgForm): any {
-    return this.http.post(this.URL_RATINGS, rating);
+    return this.http.post(this.URL_RATINGS_SAVE, rating);
   }
 
   get(ratingId: string): Observable<Rating> {

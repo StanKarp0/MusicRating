@@ -68,7 +68,6 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Optional<Album> save(AlbumForm albumForm) {
-
         return Optional.ofNullable(albumForm.getAlbumId())
                 .map(albumRepository::getOne)
                 .map(album -> {

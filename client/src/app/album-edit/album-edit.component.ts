@@ -52,7 +52,6 @@ export class AlbumEditComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
-    console.log(form);
     this.albumService.save(form).subscribe(album => {
       this.album = album;
       this.goBack();

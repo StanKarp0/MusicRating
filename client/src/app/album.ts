@@ -10,7 +10,9 @@ export class Album {
     performerId?: number;
 
     _links?: {
-        album: Object;
+        album: {
+            href: string;
+        };
         decade: Object;
         performer: Object;
         ratings: Object;
