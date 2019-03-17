@@ -5,6 +5,8 @@ import { Album, AlbumList } from '../album';
 import { AlbumListComponent } from '../album-list/album-list.component';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap, filter} from 'rxjs/operators';
+import { PerformerService } from '../shared/performer/performer.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-performer-detail',
@@ -31,7 +33,9 @@ export class PerformerDetailComponent implements OnInit {
   albumListChanged = new EventEmitter<any>();
 
   constructor(
-    private albumService: AlbumService
+    private router: Router,
+    private albumService: AlbumService,
+    private performerService: PerformerService,
   ) { }
 
   @Input() 
@@ -82,6 +86,19 @@ export class PerformerDetailComponent implements OnInit {
       this.performerChanged.emit(null)
       this.albumListChanged.emit(null)
     })
+  }
 
+  remove() {
+    this.performerService.remove(this._performer).subscribe(result => {
+      this._performer = null
+      this.albums = []
+      this.resultsLength = 0;
+      this.albumListChanged.emit(null)
+      this.gotoPerformerList()
+    })
+  }
+
+  gotoPerformerList() {
+    this.router.navigate(['/performers']);
   }
 }

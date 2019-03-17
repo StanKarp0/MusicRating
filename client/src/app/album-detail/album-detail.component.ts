@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { Album } from '../album';
 import { Rating } from '../rating';
 import {Subscription, merge, of as observableOf} from 'rxjs';
@@ -13,7 +13,7 @@ import { RatingService } from '../shared/rating/rating.service';
   templateUrl: './album-detail.component.html',
   styleUrls: ['./album-detail.component.css']
 })
-export class AlbumDetailComponent implements OnInit {
+export class AlbumDetailComponent implements OnInit, AfterViewInit {
 
   album: Album | null = null;
   ratings: Rating[];
@@ -27,6 +27,8 @@ export class AlbumDetailComponent implements OnInit {
   pageIndex = 0
 
   @ViewChild(RatingsListComponent) ratingsList: RatingsListComponent;
+
+  listChanged = new EventEmitter<any>();
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +54,7 @@ export class AlbumDetailComponent implements OnInit {
   }
 
   getRatings() {
-    merge(this.ratingsList.changed).pipe(
+    merge(this.ratingsList.changed, this.listChanged).pipe(
       startWith({}),
       switchMap(() => {
         this.isLoadingResults = true;
@@ -74,6 +76,16 @@ export class AlbumDetailComponent implements OnInit {
     ).subscribe(ratings => {
       this.ratings = ratings      
     });
+  }
+
+  ngAfterViewInit() {
+    this.ratingsList.deleteClicked.pipe(
+      switchMap((rating: Rating) => {
+        return this.ratingService.remove(rating);
+      })
+    ).subscribe(result => {
+      this.listChanged.emit(null)
+    })
   }
 
   remove() {

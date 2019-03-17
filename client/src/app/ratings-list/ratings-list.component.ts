@@ -39,7 +39,8 @@ export class RatingsListComponent implements OnInit {
   @Input()
   resultsLength: number = 0;
 
-  @Output() changed = new EventEmitter<any>();
+  @Output() 
+  changed = new EventEmitter<any>();
 
   @Output()
   get pageSize(): number {
@@ -51,6 +52,9 @@ export class RatingsListComponent implements OnInit {
     return this.paginator.pageIndex;
   }
 
+  @Output()
+  deleteClicked = new EventEmitter<Rating>();
+
   ngOnInit() {
   }
 
@@ -60,5 +64,9 @@ export class RatingsListComponent implements OnInit {
     .subscribe(() => {
       this.changed.emit(null);      
     });
+  }
+
+  remove(rating: Rating) {
+    this.deleteClicked.emit(rating);
   }
 }

@@ -44,7 +44,8 @@ export class PerformerService {
     return this.http.post(this.URL_PERFORMERS, performerForm);
   }
 
-  remove(href: string) {
+  remove(performer: Performer): Observable<Object> {
+    const href = performer._links.performer.href; 
     return this.http.delete(href);
   }
 }

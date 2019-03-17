@@ -55,4 +55,10 @@ export class RatingService {
     return this.http.get<Rating>(this.URL_RATINGS + '/' + ratingId);
   }
 
+  remove(rating: Rating): Observable<{}> {
+    const href = rating._links.rating.href; 
+    return this.http.delete(href);
+  }
+
+
 }

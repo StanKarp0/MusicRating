@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../shared/user/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -28,6 +28,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   @ViewChild(RatingsListComponent) ratingsList: RatingsListComponent;
 
+  listChanged = new EventEmitter<any>();
+
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
@@ -51,7 +53,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   getRatings() {
-      merge(this.ratingsList.changed).pipe(
+      merge(this.ratingsList.changed, this.listChanged).pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
@@ -73,6 +75,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       ).subscribe(ratings => {
         this.ratings = ratings      
       });
+  }
+
+  ngAfterViewInit() {
+    this.ratingsList.deleteClicked.pipe(
+      switchMap((rating: Rating) => {
+        return this.ratingService.remove(rating);
+      })
+    ).subscribe(result => {
+      this.listChanged.emit(null)
+    })
   }
 
   ngOnDestroy() {

@@ -65,9 +65,8 @@ export class AlbumService {
     return this.http.post(this.URL_ALBUMS, album);
   }
 
-  remove(album: Album) {
+  remove(album: Album): Observable<Object>{
     const href = album._links.album.href; 
-    console.log('remove', href, album);
     return this.http.delete(href);
   }
 }
