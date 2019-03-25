@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule, MatCardModule, MatInputModule, MatListModule, MatToolbarModule, MatMenuModule, MatProgressSpinnerModule, MatPaginatorModule, MatSortModule, MatSliderModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,8 +14,6 @@ import { AlbumEditComponent } from './album-edit/album-edit.component';
 import { PerformerListComponent } from './performer-list/performer-list.component';
 import { PerformerDetailComponent } from './performer-detail/performer-detail.component';
 import { AlbumListAllComponent } from './album-list-all/album-list-all.component';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatTableModule} from '@angular/material/table';
 import { AlbumListRandomComponent } from './album-list-random/album-list-random.component';
 import { RatingsListComponent } from './ratings-list/ratings-list.component';
 import { RatingsListAllComponent } from './ratings-list-all/ratings-list-all.component';
@@ -24,6 +24,10 @@ import { PerformerEditComponent } from './performer-edit/performer-edit.componen
 import { PerformerEditorComponent } from './performer-editor/performer-editor.component';
 import { PerformerAddComponent } from './performer-add/performer-add.component';
 import { RatingEditComponent } from './rating-edit/rating-edit.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { AdminComponent } from './admin/admin.component';
+import { httpInterceptorProviders } from './auth/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,10 @@ import { RatingEditComponent } from './rating-edit/rating-edit.component';
     PerformerEditComponent,
     PerformerEditorComponent,
     PerformerAddComponent,
-    RatingEditComponent
+    RatingEditComponent,
+    LoginComponent,
+    RegisterComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +71,7 @@ import { RatingEditComponent } from './rating-edit/rating-edit.component';
     ReactiveFormsModule,
     MatSliderModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

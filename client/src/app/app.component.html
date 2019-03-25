@@ -16,6 +16,24 @@
     <a mat-button routerLink="/ratings">Ratings</a>
   </span>
   
+  <span *ngIf="authority === 'user'">
+    <a mat-button routerLink="user">User Board</a>
+  </span>
+  <span *ngIf="authority === 'admin'">
+    <a mat-button routerLink="admin">Admin Board</a>
+  </span>
+  <span *ngIf="!authority">
+    <a mat-button routerLink="auth/login">Login</a>
+  </span>
+  <span *ngIf="!authority">
+    <a mat-button routerLink="signup">Sign Up</a>
+  </span>
+  <span *ngIf="authority">
+    <button mat-button (click)="logout()">Logout</button>
+  </span>
+
+
+
 </mat-toolbar>
 
 <router-outlet></router-outlet>

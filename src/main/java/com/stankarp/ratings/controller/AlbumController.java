@@ -3,7 +3,7 @@ package com.stankarp.ratings.controller;
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.service.AlbumService;
-import com.stankarp.ratings.service.forms.AlbumForm;
+import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -43,6 +44,7 @@ public class AlbumController {
         return addLinks(albumService.findAll(pageable, YearRangeHelper.allYears()), assembler);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public Resource<Album> save(@RequestBody AlbumForm albumForm, PagedResourcesAssembler<Album> assembler) {
         logger.info(albumForm.toString());
@@ -53,11 +55,6 @@ public class AlbumController {
         logger.info(res.toString());
         return res;
     }
-
-//    @GetMapping(path = "/{albumId:[0-9]*}", produces = {"application/hal+json"})
-//    public Album album(@PathVariable  Long albumId, PagedResourcesAssembler<Album> assembler) {
-//        return addLinks(albumService.findOne(albumId), assembler);
-//    }
 
     @GetMapping(path = "year/{year:[1-2][0-9]{3}}", produces = {"application/hal+json"})
     public PagedResources<Resource<Album>> year(@PathVariable Integer year, @PageableDefault Pageable pageable,

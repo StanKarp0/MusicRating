@@ -2,10 +2,11 @@ package com.stankarp.ratings.controller;
 
 import com.stankarp.ratings.entity.Rating;
 import com.stankarp.ratings.service.RatingService;
-import com.stankarp.ratings.service.forms.RatingForm;
+import com.stankarp.ratings.message.request.RatingForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping(path = "save", produces = {"application/hal+json"})
     public Resource<Rating> save(@RequestBody RatingForm ratingForm) {
         logger.info(ratingForm.toString());

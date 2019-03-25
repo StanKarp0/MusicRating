@@ -1,12 +1,11 @@
 package com.stankarp.ratings.service.impl;
 
 import com.stankarp.ratings.entity.Rating;
-import com.stankarp.ratings.entity.User;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.RatingRepository;
 import com.stankarp.ratings.repository.UserRepository;
 import com.stankarp.ratings.service.RatingService;
-import com.stankarp.ratings.service.forms.RatingForm;
+import com.stankarp.ratings.message.request.RatingForm;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

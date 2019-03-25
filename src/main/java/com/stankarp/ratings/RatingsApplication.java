@@ -4,10 +4,12 @@ import com.stankarp.ratings.entity.*;
 import com.stankarp.ratings.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -31,6 +33,9 @@ public class RatingsApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(RatingsApplication.class);
 
+    @Autowired
+    private PasswordEncoder encoder;
+
 	public static void main(String[] args) {
 		SpringApplication.run(RatingsApplication.class, args);
 	}
@@ -48,7 +53,7 @@ public class RatingsApplication {
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
 
-    String randomString( int len ){
+    String randomString(int len){
         StringBuilder sb = new StringBuilder( len );
         for( int i = 0; i < len; i++ )
             sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
@@ -62,16 +67,18 @@ public class RatingsApplication {
         return args -> {
 
             // ROLES
-            Role role1 = new Role("ADMIN");
-            Role role2 = new Role("USER");
+            Role role1 = new Role(RoleName.ROLE_ADMIN);
+            Role role2 = new Role(RoleName.ROLE_PM);
+            Role role3 = new Role(RoleName.ROLE_USER);
 
             roleRepository.save(role1);
             roleRepository.save(role2);
+            roleRepository.save(role3);
 
             // USERS
-            User user1 = new User("admin", "admin");
-            User user2 = new User("admin-user", "admin");
-            User user3 = new User("user", "admin");
+            User user1 = new User("admin", encoder.encode("admin123"));
+            User user2 = new User("admin-user", encoder.encode("admin-user123"));
+            User user3 = new User("user", encoder.encode("user123"));
             List<User> users = Stream.of(user1, user2, user3).collect(Collectors.toList());
 
             user1.setRoles(Stream.of(role1).collect(Collectors.toSet()));

@@ -1,11 +1,10 @@
 package com.stankarp.ratings.service.impl;
 
 import com.stankarp.ratings.entity.Album;
-import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.AlbumService;
-import com.stankarp.ratings.service.forms.AlbumForm;
+import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

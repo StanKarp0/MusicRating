@@ -1,77 +1,70 @@
 package com.stankarp.ratings.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.hateoas.ResourceSupport;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-public class Role extends ResourceSupport {
+@Table(name = "roles")
+public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long roleId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false, length = 30, unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @NaturalId
+    @Column(length = 60)
+    private RoleName name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();;
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "roleId=" + roleId +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Role(Long id, RoleName name) {
+        this.id = id;
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Role(String name) {
+    public Role(RoleName name) {
         this.name = name;
     }
 
     public Role() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RoleName getName() {
+        return name;
+    }
+
+    public void setName(RoleName name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Role role = (Role) o;
-        return Objects.equals(roleId, role.roleId);
+        return Objects.equals(id, role.id) &&
+                name == role.name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), roleId);
+        return Objects.hash(id, name);
     }
 }

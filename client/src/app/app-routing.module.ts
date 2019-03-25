@@ -11,6 +11,9 @@ import { AlbumDetailComponent } from './album-detail/album-detail.component';
 import { PerformerEditComponent } from './performer-edit/performer-edit.component';
 import { PerformerAddComponent } from './performer-add/performer-add.component';
 import { RatingEditComponent } from './rating-edit/rating-edit.component';
+import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/random', pathMatch: 'full' },
@@ -34,6 +37,11 @@ const routes: Routes = [
   { path: 'performer/:performerId/edit', component: PerformerEditComponent },
   { path: 'album/:albumId/edit', component: AlbumEditComponent },
   { path: 'rating/:ratingId/edit', component: RatingEditComponent },
+
+  // auth
+  { path: 'admin', component: AdminComponent },
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'signup', component: RegisterComponent },
 ];
 
 @NgModule({

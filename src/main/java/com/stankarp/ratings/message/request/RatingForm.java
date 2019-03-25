@@ -1,4 +1,4 @@
-package com.stankarp.ratings.service.forms;
+package com.stankarp.ratings.message.request;
 
 public class RatingForm {
 
