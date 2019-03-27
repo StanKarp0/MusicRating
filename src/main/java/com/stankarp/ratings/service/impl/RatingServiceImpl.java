@@ -27,7 +27,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Optional<Rating> save(RatingForm ratingForm) {
-        String username = Optional.ofNullable(ratingForm.getUsername()).orElse("user");
         return Optional.ofNullable(ratingForm.getRatingId())
                 .map(ratingRepository::getOne)
                 .map(rating -> {
@@ -37,7 +36,7 @@ public class RatingServiceImpl implements RatingService {
                 .map(Optional::of)
                 .orElse(Optional.ofNullable(ratingForm.getAlbumId())
                         .map(albumRepository::getOne)
-                        .flatMap(album -> userRepository.findByUsername(username)
+                        .flatMap(album -> userRepository.findByUsername(ratingForm.getUserName())
                                 .map(user -> new Rating(user, ratingForm.getRate(), ratingForm.getDescription(), album))))
                 .map(ratingRepository::save);
     }

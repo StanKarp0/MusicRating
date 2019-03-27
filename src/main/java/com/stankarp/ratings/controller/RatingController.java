@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("ratings")
+@RequestMapping("/ratings")
 public class RatingController {
 
     private RatingService ratingService;
@@ -25,7 +25,7 @@ public class RatingController {
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping(path = "save", produces = {"application/hal+json"})
+    @PostMapping(path = "save", produces = {"application/json"})
     public Resource<Rating> save(@RequestBody RatingForm ratingForm) {
         logger.info(ratingForm.toString());
         Resource<Rating> res = ratingService.save(ratingForm)

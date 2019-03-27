@@ -1,3 +1,6 @@
+<div class="row">
+
+  <div class="column">
 <mat-card>
   <mat-card-title>Artists List</mat-card-title>
 
@@ -10,14 +13,17 @@
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
       </mat-form-field>
 
-    <div class="example-loading-shade"
+      <div class="container mat-elevation-z8">
+
+    <div class="loading-shade"
       *ngIf="isLoadingResults || isRateLimitReached">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+      <div class="rate-limit-reached" *ngIf="isRateLimitReached">
         API rate limit has been reached. It will be reset in one minute.
       </div>
     </div>
 
+    <div class="table-container">
     <table mat-table
        [dataSource]="performers" 
        multiTemplateDataRows
@@ -36,10 +42,14 @@
         </tr>
 
     </table>
-
+  </div>
   <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+</div>
 
   </mat-card-content>
 </mat-card>
-
+</div>
+<div class="column">
 <app-performer-detail [performer]="selectedPerformer"></app-performer-detail>
+</div>
+</div>

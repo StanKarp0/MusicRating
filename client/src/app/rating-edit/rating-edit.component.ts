@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { AlbumService } from '../shared/album/album.service';
 import { Album } from '../album';
+import { TokenStorageService } from '../auth/token-storage.service';
 
 @Component({
   selector: 'app-rating-edit',
@@ -23,6 +24,7 @@ export class RatingEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private ratingService: RatingService,
     private albumService: AlbumService,
+    private token: TokenStorageService,
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class RatingEditComponent implements OnInit, OnDestroy {
         });
       } else if (albumId) {
         this.rating.albumId = albumId;
+        this.rating.userName = this.token.getUsername();
         this.albumService.get(albumId).subscribe((album: Album) => {
           if (album) {
             this.album = album;
@@ -62,7 +65,6 @@ export class RatingEditComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
-    console.log('save rating', form);
     this.ratingService.save(form).subscribe(result => {
       this.goBack();
     }, error => console.error(error));

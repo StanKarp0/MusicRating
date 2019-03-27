@@ -1,16 +1,27 @@
 package com.stankarp.ratings.message.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.DecimalMax;
+
 public class RatingForm {
 
-    private String description;
+    @NotBlank
+    private String description = "";
 
+    @NotBlank
+    @DecimalMin(value = "0.1", inclusive = true)
+    @DecimalMax(value = "9.9", inclusive = true)
     private Double rate;
 
+    @NotBlank
     private Long albumId;
 
+    @NotBlank
     private Long ratingId;
 
-    private String username;
+    @NotBlank
+    private String userName;
 
     public RatingForm() {
     }
@@ -47,12 +58,12 @@ public class RatingForm {
         this.ratingId = ratingId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String username) {
+        this.userName = username;
     }
 
     @Override
@@ -62,7 +73,7 @@ public class RatingForm {
                 ", rate=" + rate +
                 ", albumId=" + albumId +
                 ", ratingId=" + ratingId +
-                ", username='" + username + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

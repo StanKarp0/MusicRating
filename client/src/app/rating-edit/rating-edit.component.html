@@ -8,6 +8,8 @@
         <input type="hidden" name="albumId" [(ngModel)]="rating.albumId">
         
         <input type="hidden" name="ratingId" [(ngModel)]="rating.ratingId">
+
+        <input type="hidden" name="userName" [(ngModel)]="rating.userName">
         
         <div *ngIf="album">
           <p>{{album.title}}</p>
