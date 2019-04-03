@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlbumService } from '../shared/album/album.service';
-import { PerformerService } from '../shared/performer/performer.service';
-import { Performer } from '../performer';
-import { Album } from '../album';
+import { AlbumService } from '../services/album/album.service';
+import { PerformerService } from '../services/performer/performer.service';
+import { Performer } from '../model/performer';
+import { Album } from '../model/album';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { AlbumListComponent } from '../album-list/album-list.component';

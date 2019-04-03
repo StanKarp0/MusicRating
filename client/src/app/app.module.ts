@@ -27,7 +27,7 @@ import { RatingEditComponent } from './rating-edit/rating-edit.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminComponent } from './admin/admin.component';
-import { httpInterceptorProviders } from './auth/auth-interceptor';
+import { httpInterceptorProviders } from './services/auth/auth-interceptor';
 
 @NgModule({
   declarations: [

@@ -1,12 +1,8 @@
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
-import { Performer, PerformerForm } from '../performer';
-import { PerformerEditorComponent } from '../performer-editor/performer-editor.component';
-import { merge, of as observableOf, Subscription, forkJoin } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Performer, PerformerForm } from '../model/performer';
+import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PerformerService } from '../shared/performer/performer.service';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import { Album } from '../album';
-import { AlbumService } from '../shared/album/album.service';
+import { PerformerService } from '../services/performer/performer.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -54,7 +50,7 @@ export class PerformerEditComponent implements OnInit, OnDestroy {
   save(form: NgForm) {
     const performer = new PerformerForm();
     performer.name = form['name']
-    this.performerService.save(performer).subscribe(result => {
+    this.performerService.save(performer).subscribe(() => {
       this.gotoPerformer();
     }, error => console.error(error));
   }

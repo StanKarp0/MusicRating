@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
-import { Album } from '../album';
-import { Rating } from '../rating';
+import { Album } from '../model/album';
+import { Rating } from '../model/rating';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { RatingsListComponent } from '../ratings-list/ratings-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlbumService } from '../shared/album/album.service';
-import { RatingService } from '../shared/rating/rating.service';
+import { AlbumService } from '../services/album/album.service';
+import { RatingService } from '../services/rating/rating.service';
 
 @Component({
   selector: 'app-album-detail',

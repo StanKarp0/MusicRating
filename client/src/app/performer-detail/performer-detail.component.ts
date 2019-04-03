@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { Performer } from '../performer';
-import { AlbumService } from '../shared/album/album.service';
-import { Album, AlbumList } from '../album';
+import { Performer } from '../model/performer';
+import { AlbumService } from '../services/album/album.service';
+import { Album, AlbumList } from '../model/album';
 import { AlbumListComponent } from '../album-list/album-list.component';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap, filter} from 'rxjs/operators';
-import { PerformerService } from '../shared/performer/performer.service';
+import { PerformerService } from '../services/performer/performer.service';
 import { Router } from '@angular/router';
 
 @Component({

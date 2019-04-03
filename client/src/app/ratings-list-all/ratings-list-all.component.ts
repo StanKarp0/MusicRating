@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Rating } from '../rating';
-import { RatingService } from '../shared/rating/rating.service';
+import { Rating } from '../model/rating';
+import { RatingService } from '../services/rating/rating.service';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { RatingsListComponent } from '../ratings-list/ratings-list.component';

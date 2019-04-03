@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
-import { Album, AlbumList } from '../album';
-import { AlbumService } from '../shared/album/album.service';
+import { Album, AlbumList } from '../model/album';
+import { AlbumService } from '../services/album/album.service';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { AlbumListComponent } from '../album-list/album-list.component';

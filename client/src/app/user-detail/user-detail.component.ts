@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { User } from '../user';
-import { UserService } from '../shared/user/user.service';
+import { User } from '../model/user';
 import { ActivatedRoute } from '@angular/router';
-import { Rating } from '../rating';
-import { RatingService } from '../shared/rating/rating.service';
+import { Rating } from '../model/rating';
 import { RatingsListComponent } from '../ratings-list/ratings-list.component';
 import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { UserService } from '../services/user/user.service';
+import { RatingService } from '../services/rating/rating.service';
 
 @Component({
   selector: 'app-user-detail',

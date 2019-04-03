@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Validators, AbstractControl, FormBuilder, FormArray } from '@angular/forms';
-import { Performer } from '../performer';
+import { Performer } from '../model/performer';
 import { BehaviorSubject } from 'rxjs';
-import { AlbumService } from '../shared/album/album.service';
-import { Album } from '../album';
+import { AlbumService } from '../services/album/album.service';
+import { Album } from '../model/album';
 
 @Component({
   selector: 'app-performer-editor',

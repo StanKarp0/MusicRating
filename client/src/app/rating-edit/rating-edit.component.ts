@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Rating } from '../rating';
+import { Rating } from '../model/rating';
 import { Subscription } from 'rxjs';
-import { RatingService } from '../shared/rating/rating.service';
+import { RatingService } from '../services/rating/rating.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { AlbumService } from '../shared/album/album.service';
-import { Album } from '../album';
-import { TokenStorageService } from '../auth/token-storage.service';
+import { AlbumService } from '../services/album/album.service';
+import { Album } from '../model/album';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-rating-edit',

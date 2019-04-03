@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Album } from '../album';
+import { Album } from '../model/album';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { AlbumService } from '../shared/album/album.service';
+import { AlbumService } from '../services/album/album.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

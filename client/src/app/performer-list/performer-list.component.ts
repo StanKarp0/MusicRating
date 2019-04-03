@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
-import { PerformerService } from '../shared/performer/performer.service';
-import { Performer } from '../performer';
+import { PerformerService } from '../services/performer/performer.service';
+import { Performer } from '../model/performer';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';

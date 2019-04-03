@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Rating } from '../rating';
+import { Rating } from '../model/rating';
 import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';

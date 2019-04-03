@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PerformerEditorComponent } from '../performer-editor/performer-editor.component';
-import { PerformerService } from '../shared/performer/performer.service';
-import { merge, of as observableOf, Subscription, forkJoin } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PerformerForm, Performer } from '../performer';
-import { Album } from '../album';
-import { AlbumService } from '../shared/album/album.service';
+import { PerformerService } from '../services/performer/performer.service';
+import { merge, of as observableOf } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { PerformerForm, Performer } from '../model/performer';
 
 @Component({
   selector: 'app-performer-add',
@@ -17,13 +15,11 @@ export class PerformerAddComponent implements OnInit {
 
   @ViewChild(PerformerEditorComponent) performerEditor: PerformerEditorComponent;
 
-  performer: Performer | null;
-  albums: {title:string, year: number, album?: Album}[];
+  private performer: Performer | null;
   
   constructor(
     private router: Router,
     private performerService: PerformerService,
-    private albumService: AlbumService,
   ) { }
 
   ngOnInit() {

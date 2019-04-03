@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RatingList, Rating } from 'src/app/rating';
-import { User } from 'src/app/user';
-import { Album } from 'src/app/album';
+import { RatingList, Rating } from 'src/app/model/rating';
+import { User } from 'src/app/model/user';
+import { Album } from 'src/app/model/album';
 import { NgForm } from '@angular/forms';
 
 @Injectable({

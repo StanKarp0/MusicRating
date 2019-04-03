@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Album } from '../album';
+import { Album } from '../model/album';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-album-list',
@@ -21,8 +22,11 @@ export class AlbumListComponent implements OnInit {
 
   columnsToDisplay = ['title', 'name', 'year', 'average'];
   expandedElement: Album | null;
+  private authorities: string[];
 
-  constructor() { }
+  constructor(
+    private tokenStorage: TokenStorageService
+  ) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -60,6 +64,9 @@ export class AlbumListComponent implements OnInit {
 
   ngOnInit() {
     this.paginator.pageSize = 10;
+    if (this.tokenStorage.getToken()) {
+      this.authorities = this.tokenStorage.getAuthorities();
+    }
   }
 
   ngAfterViewInit(): void {
