@@ -19,6 +19,16 @@ export class Performer {
     href?: string;
 }
 
+export class PerformerForm {
+
+    name: string;
+    albums: {
+        title: string;
+        year: number;
+    };
+
+}
+
 export class PerformerList {
 
     _embedded: {

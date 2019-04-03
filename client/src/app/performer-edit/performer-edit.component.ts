@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
-import { Performer } from '../performer';
+import { Performer, PerformerForm } from '../performer';
 import { PerformerEditorComponent } from '../performer-editor/performer-editor.component';
 import { merge, of as observableOf, Subscription, forkJoin } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -52,7 +52,9 @@ export class PerformerEditComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
-    this.performerService.save(form).subscribe(result => {
+    const performer = new PerformerForm();
+    performer.name = form['name']
+    this.performerService.save(performer).subscribe(result => {
       this.gotoPerformer();
     }, error => console.error(error));
   }

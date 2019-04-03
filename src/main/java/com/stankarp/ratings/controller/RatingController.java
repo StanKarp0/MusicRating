@@ -18,7 +18,7 @@ public class RatingController {
 
     private RatingService ratingService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbumController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RatingController.class);
 
     public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
@@ -27,12 +27,9 @@ public class RatingController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping(path = "save", produces = {"application/json"})
     public Resource<Rating> save(@RequestBody RatingForm ratingForm) {
-        logger.info(ratingForm.toString());
-        Resource<Rating> res = ratingService.save(ratingForm)
+        return ratingService.save(ratingForm)
                 .map(album -> new Resource<>(album))
                 .orElse(new Resource<>(new Rating()));
-        logger.info(res.toString());
-        return res;
     }
 
 }

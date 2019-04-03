@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PerformerList, Performer } from '../../performer';
+import { PerformerList, Performer, PerformerForm } from '../../performer';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ export class PerformerService {
 
   public API = '//localhost:8080';
   private URL_PERFORMERS = this.API + '/performers';
+  private URL_PERFORMERS_SAVE = this.URL_PERFORMERS + '/save'
   private URL_SEARCH = this.URL_PERFORMERS + '/search/findByQuery';
 
   constructor(private http: HttpClient) { }
@@ -40,8 +41,8 @@ export class PerformerService {
     return this.http.get<Performer>(this.URL_PERFORMERS + '/' + id);
   }
 
-  save(performerForm: Performer): Observable<Performer> {
-    return this.http.post(this.URL_PERFORMERS, performerForm);
+  save(performerForm: PerformerForm): Observable<Performer> {
+    return this.http.post(this.URL_PERFORMERS_SAVE, performerForm);
   }
 
   remove(performer: Performer): Observable<Object> {

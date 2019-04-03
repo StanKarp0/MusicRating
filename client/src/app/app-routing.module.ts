@@ -29,8 +29,8 @@ const routes: Routes = [
   { path: 'album/:albumId/details', component: AlbumDetailComponent},
 
   // add
-  { path: 'performer/:performerId/add', component: AlbumEditComponent },
   { path: 'performer/add', component: PerformerAddComponent },
+  { path: 'performer/:performerId/add', component: AlbumEditComponent },
   { path: 'album/:albumId/rate', component: RatingEditComponent },
 
   // edit
