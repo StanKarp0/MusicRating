@@ -22,7 +22,7 @@ export class AlbumListComponent implements OnInit {
 
   columnsToDisplay = ['title', 'name', 'year', 'average'];
   expandedElement: Album | null;
-  private authorities: string[];
+  authorities: string[] = [];
 
   constructor(
     private tokenStorage: TokenStorageService

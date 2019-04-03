@@ -7,6 +7,7 @@ import { RatingsListComponent } from '../ratings-list/ratings-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlbumService } from '../services/album/album.service';
 import { RatingService } from '../services/rating/rating.service';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-album-detail',
@@ -18,6 +19,7 @@ export class AlbumDetailComponent implements OnInit, AfterViewInit {
   album: Album | null = null;
   ratings: Rating[];
   subscription: Subscription;
+  authorities: string[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -34,10 +36,14 @@ export class AlbumDetailComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private albumService: AlbumService,
-    private ratingService: RatingService
+    private ratingService: RatingService,
+    private tokenStorage: TokenStorageService
   ) { }
 
   ngOnInit() {
+    if (this.tokenStorage.getToken()) {
+      this.authorities = this.tokenStorage.getAuthorities();
+    }
     this.subscription = this.route.params.subscribe(params => {
       const albumId = params['albumId'];
       if (albumId) {

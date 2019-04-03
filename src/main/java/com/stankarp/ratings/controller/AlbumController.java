@@ -23,6 +23,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/albums")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AlbumController {
 
     private AlbumService albumService;

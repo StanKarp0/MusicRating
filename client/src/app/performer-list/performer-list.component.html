@@ -5,7 +5,9 @@
   <mat-card-title>Artists List</mat-card-title>
 
   <mat-card-actions>
-      <a mat-button routerLink="/performer/add">Add artist</a>
+      <div *ngIf="authorities.includes('ROLE_USER')">
+        <a mat-button routerLink="/performer/add">Add artist</a>
+      </div>
   </mat-card-actions>
 
   <mat-card-content>

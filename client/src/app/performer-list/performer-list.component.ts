@@ -6,6 +6,7 @@ import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { PerformerDetailComponent } from '../performer-detail/performer-detail.component';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-performer-list',
@@ -24,6 +25,7 @@ export class PerformerListComponent implements OnInit {
   selectedPerformer: Performer | null;
   performers: Performer[];
   columnsToDisplay = ['name', 'average', 'albumCount', 'ratingsCount'];
+  authorities: string[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -37,10 +39,14 @@ export class PerformerListComponent implements OnInit {
   @ViewChild(PerformerDetailComponent) performerDetail: PerformerDetailComponent;
 
   constructor(
-    private performerService: PerformerService
+    private performerService: PerformerService,
+    private tokenStorage: TokenStorageService
   ) { }
 
   ngOnInit() {
+    if (this.tokenStorage.getToken()) {
+      this.authorities = this.tokenStorage.getAuthorities();
+    }
   }
 
   ngAfterViewInit(): void {

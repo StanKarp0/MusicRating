@@ -7,6 +7,7 @@ import {Subscription, merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap, filter} from 'rxjs/operators';
 import { PerformerService } from '../services/performer/performer.service';
 import { Router } from '@angular/router';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-performer-detail',
@@ -17,6 +18,7 @@ export class PerformerDetailComponent implements OnInit {
 
   @Input() _performer: Performer;
   albums: Album[];
+  authorities: string[] = [];
 
   resultsLength = 0;
   isLoadingResults = false;
@@ -36,6 +38,7 @@ export class PerformerDetailComponent implements OnInit {
     private router: Router,
     private albumService: AlbumService,
     private performerService: PerformerService,
+    private tokenStorage: TokenStorageService
   ) { }
 
   @Input() 
@@ -47,7 +50,11 @@ export class PerformerDetailComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.tokenStorage.getToken()) {
+      this.authorities = this.tokenStorage.getAuthorities();
+    }
+  }
 
   ngAfterViewInit(): any {
     merge(this.albumList.changed, this.performerChanged).pipe(

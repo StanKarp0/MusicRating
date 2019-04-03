@@ -27,9 +27,11 @@
                 <button mat-button [routerLink]="['/performer', album.performerId, 'details']">{{album.name}}</button>
                 <button mat-button [routerLink]="['/album', album.albumId, 'details']">Details</button>
                 
-                <button mat-button [routerLink]="['/album', album.albumId, 'rate']">Rate</button>
-                <button mat-button [routerLink]="['/album', album.albumId, 'edit']">Edit</button>
-                <button mat-button (click)="remove(album)">Remove</button>
+                <div *ngIf="authorities.includes('ROLE_USER')">
+                  <button mat-button [routerLink]="['/album', album.albumId, 'rate']">Rate</button>
+                  <button mat-button [routerLink]="['/album', album.albumId, 'edit']">Edit</button>
+                  <button mat-button (click)="remove(album)">Remove</button>
+                </div>
             </div>
           </td>
       </ng-container>

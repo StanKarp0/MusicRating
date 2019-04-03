@@ -17,7 +17,7 @@
   </span>
   
   <span *ngIf="authority === 'user'">
-    <a mat-button routerLink="user">User Board</a>
+    <a mat-button [routerLink]="['/user', loggedUser]">User Board</a>
   </span>
   <span *ngIf="authority === 'admin'">
     <a mat-button routerLink="admin">Admin Board</a>

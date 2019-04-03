@@ -3,9 +3,12 @@
 
   <mat-card-actions *ngIf="album">
     <button mat-button [routerLink]="['/performer', album.performerId, 'details']">{{album.name}}</button>
-    <button mat-button [routerLink]="['/album', album.albumId, 'edit']">Edit</button>
-    <button mat-button [routerLink]="['/album', album.albumId, 'rate']">Rate</button>
-    <button mat-button (click)="remove()">Remove</button>
+
+    <div *ngIf="authorities.includes('ROLE_USER')">
+      <button mat-button [routerLink]="['/album', album.albumId, 'edit']">Edit</button>
+      <button mat-button [routerLink]="['/album', album.albumId, 'rate']">Rate</button>
+      <button mat-button (click)="remove()">Remove</button>
+    </div>
   </mat-card-actions>
 
   <mat-card-content>

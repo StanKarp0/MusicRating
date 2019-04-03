@@ -4,6 +4,7 @@ import { MatPaginator, MatSort } from '@angular/material';
 import {merge, of as observableOf} from 'rxjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Router } from '@angular/router';
+import { TokenStorageService } from '../services/auth/token-storage.service';
 
 @Component({
   selector: 'app-ratings-list',
@@ -21,8 +22,13 @@ export class RatingsListComponent implements OnInit {
 
   columnsToDisplay = ['date', 'userName', 'name', 'title', 'rate'];
   expandedElement: Rating | null;
+  loggedUsername: string;
+  authorities: string[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private tokenStorage: TokenStorageService
+    ) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -56,6 +62,10 @@ export class RatingsListComponent implements OnInit {
   deleteClicked = new EventEmitter<Rating>();
 
   ngOnInit() {
+    if (this.tokenStorage.getToken()) {
+      this.authorities = this.tokenStorage.getAuthorities();
+      this.loggedUsername = this.tokenStorage.getUsername();
+    }
   }
 
   ngAfterViewInit(): void {

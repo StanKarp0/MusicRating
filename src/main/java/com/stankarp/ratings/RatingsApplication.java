@@ -82,8 +82,8 @@ public class RatingsApplication {
             List<User> users = Stream.of(user1, user2, user3).collect(Collectors.toList());
 
             user1.setRoles(Stream.of(role1).collect(Collectors.toSet()));
-            user2.setRoles(Stream.of(role1, role2).collect(Collectors.toSet()));
-            user3.setRoles(Stream.of(role2).collect(Collectors.toSet()));
+            user2.setRoles(Stream.of(role1, role3).collect(Collectors.toSet()));
+            user3.setRoles(Stream.of(role3).collect(Collectors.toSet()));
 
             userRepository.save(user1);
             userRepository.save(user2);
