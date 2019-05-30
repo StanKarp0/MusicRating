@@ -3,17 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Album, AlbumList } from '../../model/album'
 import { Performer } from 'src/app/model/performer';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlbumService {
 
-  public API = '//localhost:8080';
-  private URL_ALBUMS = this.API + '/albums';
+  private URL_ALBUMS = environment.api + '/albums';
   private URL_SEARCH = this.URL_ALBUMS + '/search/findByQuery';
   private URL_PERFORMER = this.URL_ALBUMS + '/search/findByPerformerId'
-  private URL_RANDOM = this.API
+  private URL_RANDOM = environment.api;
 
   constructor(private http: HttpClient) { }
 

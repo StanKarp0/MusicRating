@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar & npm start --prefix client
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar

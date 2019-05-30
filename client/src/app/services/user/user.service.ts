@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { User, UserList } from 'src/app/model/user';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  public API = '//localhost:8080';
-  private URL_USERS = this.API + '/users';
+  private URL_USERS = environment.api + '/users';
   private URL_QUERY = this.URL_USERS + '/query';
 
   constructor(private http: HttpClient) { }
