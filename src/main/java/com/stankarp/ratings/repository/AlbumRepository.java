@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RepositoryRestResource
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Page<Album> findByYearBetween(Integer year1, Integer year2, Pageable pageable);

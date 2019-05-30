@@ -1,0 +1,7 @@
+{
+  "name": "client-app",
+  "version": "0.1.0",
+  "scripts": {
+    "postinstall": "npm install --prefix client && npm install --prefix client-app"
+  }
+}

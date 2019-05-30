@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RepositoryRestResource(collectionResourceRel = "ratings", path = "ratings")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("SELECT r FROM Rating r WHERE r.album.albumId=?1")

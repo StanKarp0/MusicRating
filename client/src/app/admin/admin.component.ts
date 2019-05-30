@@ -51,7 +51,7 @@ export class AdminComponent implements OnInit {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.resultsLength = data.page.totalElements;
-          return data._embedded.performers;
+          return data._embedded.users;
         }),
         catchError((e) => {
           console.error('Error', e)
@@ -59,8 +59,8 @@ export class AdminComponent implements OnInit {
           this.isRateLimitReached = true;
           return observableOf([]);
         })
-      ).subscribe(performers => {
-        this.performers = performers      
+      ).subscribe(users => {
+        this.users = users      
       });
   }
 

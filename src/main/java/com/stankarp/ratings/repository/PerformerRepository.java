@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RepositoryRestResource
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface PerformerRepository extends JpaRepository<Performer, Long> {
 
     Page<Performer> findByName(String name, Pageable pageable);
