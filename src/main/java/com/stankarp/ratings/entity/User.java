@@ -27,8 +27,6 @@ public class User {
     @Size(min=6, max = 100)
     private String password;
 
-    private Integer year;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

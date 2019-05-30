@@ -27,19 +27,19 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(PerformerController.class);
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(path = "", produces = {"application/json"})
-    public PagedResources<Resource<UserResponse>> all(@PageableDefault Pageable pageable, PagedResourcesAssembler<UserResponse> assembler) {
-        Page<UserResponse> page = userRepository.findUserStats(pageable);
-        return assembler.toResource(page);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(path = "", produces = {"application/json"})
-    public PagedResources<Resource<UserResponse>> query(@PageableDefault Pageable pageable, @PathVariable String query, PagedResourcesAssembler<UserResponse> assembler) {
-        Page<UserResponse> page = userRepository.findUserStats(query, pageable);
-        return assembler.toResource(page);
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping(path = "", produces = {"application/json"})
+//    public PagedResources<Resource<UserResponse>> all(@PageableDefault Pageable pageable, PagedResourcesAssembler<UserResponse> assembler) {
+////        Page<UserResponse> page = userRepository.findUserStats(pageable);
+//        return assembler.toResource(Page.empty());
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping(path = "", produces = {"application/json"})
+//    public PagedResources<Resource<UserResponse>> query(@PageableDefault Pageable pageable, @PathVariable String query, PagedResourcesAssembler<UserResponse> assembler) {
+////        Page<UserResponse> page = userRepository.findUserStats(query, pageable);
+//        return assembler.toResource(Page.empty());
+//    }
 }
 
 
