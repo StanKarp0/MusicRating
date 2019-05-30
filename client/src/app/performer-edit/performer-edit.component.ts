@@ -50,7 +50,8 @@ export class PerformerEditComponent implements OnInit, OnDestroy {
   save(form: NgForm) {
     const performer = new PerformerForm();
     performer.name = form['name']
-    this.performerService.save(performer).subscribe(() => {
+    performer.performerId = form['performerId']
+    this.performerService.update(performer).subscribe(() => {
       this.gotoPerformer();
     }, error => console.error(error));
   }

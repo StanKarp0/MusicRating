@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { User } from 'src/app/model/user';
+import { User, UserList } from 'src/app/model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -10,34 +10,25 @@ export class UserService {
 
   public API = '//localhost:8080';
   private URL_USERS = this.API + '/users';
-  private URL_FIND = this.URL_USERS + '/search/findByUsername';
-  // private userUrl = 'http://localhost:8080/api/test/user';
-  // private pmUrl = 'http://localhost:8080/api/test/pm';
-  // private adminUrl = 'http://localhost:8080/api/test/admin';
+  private URL_QUERY = this.URL_USERS + '/query';
 
   constructor(private http: HttpClient) { }
+ 
+  getAdminBoard(pageSize: number, pageIndex: number): Observable<User> {
+    return this.http.get<User>(this.URL_USERS, {
+      params:{
+        size: pageSize.toString(),
+        page: pageIndex.toString(),
+      }});
+  }
 
-  getByUserName(username: string): Observable<User> {
-    return this.http.get<User>(this.URL_FIND, {
-      params: {
-        username: username
-      }
-    })
-  }
-  
-  getUserBoard(): Observable<string> {
-    // return this.http.get(this.userUrl, { responseType: 'text' });
-    return of('');
-  }
- 
-  getPMBoard(): Observable<string> {
-    // return this.http.get(this.pmUrl, { responseType: 'text' });
-    return of('');
-  }
- 
-  getAdminBoard(): Observable<string> {
-    // return this.http.get(this.adminUrl, { responseType: 'text' });
-    return of('');
+  findByName(query: string, pageSize: number, pageIndex: number): Observable<UserList> {
+    return this.http.get<UserList>(this.URL_QUERY, {
+      params:{
+        query: query,
+        size: pageSize.toString(),
+        page: pageIndex.toString(),
+      }});
   }
 
 }

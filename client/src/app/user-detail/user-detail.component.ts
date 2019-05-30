@@ -38,17 +38,24 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
+
       const username = params['username'];
       if (username) {
-        this.userService.getByUserName(username).subscribe((user: User) => {
-          if (user) {
-            this.user = user;
-            this.getRatings()
-          } else {
-            console.log(`User with id '${username}' not found, returning to list`);
-          }
-        });
+        this.user = new User();
+        this.user.username = username;
       }
+
+    // const username = params['username'];
+    //   if (username) {
+    //     this.userService.getByUserName(username).subscribe((user: User) => {
+    //       if (user) {
+    //         this.user = user;
+    //         this.getRatings()
+    //       } else {
+    //         console.log(`User with id '${username}' not found, returning to list`);
+    //       }
+    //     });
+    //   }
     });
   }
 
@@ -56,6 +63,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       merge(this.ratingsList.changed, this.listChanged).pipe(
         startWith({}),
         switchMap(() => {
+          console.log('Switchmap');
           this.isLoadingResults = true;
           return this.ratingService.findByUser(
             this.user, this.ratingsList.pageSize, this.ratingsList.pageIndex);
@@ -85,6 +93,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     ).subscribe(result => {
       this.listChanged.emit(null)
     })
+    console.log('getratings')
+    this.getRatings();
   }
 
   ngOnDestroy() {

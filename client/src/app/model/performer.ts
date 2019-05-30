@@ -22,6 +22,7 @@ export class Performer {
 export class PerformerForm {
 
     name: string;
+    performerId?: number;
     albums: {
         title: string;
         year: number;

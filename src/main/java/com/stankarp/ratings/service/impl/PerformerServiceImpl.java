@@ -4,6 +4,7 @@ import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.message.request.PerformerAlbumForm;
 import com.stankarp.ratings.message.request.PerformerForm;
+import com.stankarp.ratings.message.request.PerformerUpdateForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.PerformerService;
@@ -35,5 +36,12 @@ public class PerformerServiceImpl implements PerformerService {
             performerRepository.save(performer);
         }
         return performer;
+    }
+
+    @Override
+    public Performer update(PerformerUpdateForm performerForm) {
+        Performer performer = performerRepository.getOne(performerForm.getPerformerId());
+        performer.setName(performerForm.getName());
+        return performerRepository.save(performer);
     }
 }
