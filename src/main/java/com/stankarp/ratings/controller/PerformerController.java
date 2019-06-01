@@ -25,14 +25,14 @@ public class PerformerController {
         this.performerService = performerService;
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = "", produces = {"application/json"})
     public Resource<Performer> save(@RequestBody PerformerForm performerForm) {
         logger.info(performerForm.toString());
         return new Resource<>(performerService.save(performerForm));
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(path = "", produces = {"application/json"})
     public Resource<Performer> update(@RequestBody PerformerUpdateForm performerForm) {
         logger.info(performerForm.toString());

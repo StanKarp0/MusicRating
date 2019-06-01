@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/ratings")
 public class RatingController {
 
@@ -24,8 +22,8 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping(path = "save", produces = {"application/json"})
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping(path = "/save", produces = {"application/json"})
     public Resource<Rating> save(@RequestBody RatingForm ratingForm) {
         return ratingService.save(ratingForm)
                 .map(album -> new Resource<>(album))

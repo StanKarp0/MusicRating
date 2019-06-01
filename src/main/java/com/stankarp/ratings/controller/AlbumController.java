@@ -45,7 +45,7 @@ public class AlbumController {
         return addLinks(albumService.findAll(pageable, YearRangeHelper.allYears()), assembler);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public Resource<Album> save(@RequestBody AlbumForm albumForm, PagedResourcesAssembler<Album> assembler) {
         logger.info(albumForm.toString());
