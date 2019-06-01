@@ -1,7 +1,11 @@
 package com.stankarp.ratings.repository;
 
 import com.stankarp.ratings.entity.User;
+import com.stankarp.ratings.message.response.UserResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,10 +17,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByUsername(String username);
 
-//    @Query("SELECT u.username, COUNT(r), AVG(r.rate) FROM User u LEFT JOIN Rating r GROUP BY u.username")
-//    Page<UserResponse> findUserStats(Pageable pageable);
-//
-//    @Query("SELECT u.username, COUNT(r), AVG(r.rate) FROM User u LEFT JOIN Rating r GROUP BY u.username WHERE UPPER(u.username) LIKE CONCAT('%',UPPER(?1),'%')")
-//    Page<UserResponse> findUserStats(String query, Pageable pageable);
-}
+    @Query("SELECT new com.stankarp.ratings.message.response.UserResponse(u) " +
+            "FROM User u")
+    Page<UserResponse> findUserStats(Pageable pageable);
 
+    @Query("SELECT new com.stankarp.ratings.message.response.UserResponse(u) " +
+            "FROM User u " +
+            "WHERE UPPER(u.username) LIKE CONCAT('%',UPPER(?1),'%')")
+    Page<UserResponse> findUserStatsQuery(String query, Pageable pageable);
+
+}

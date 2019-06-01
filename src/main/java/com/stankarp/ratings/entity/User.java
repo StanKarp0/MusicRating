@@ -92,6 +92,14 @@ public class User {
         this.roles = roles;
     }
 
+    public double getAverage() {
+        return ratings.stream().mapToDouble(Rating::getRate).average().orElse(0);
+    }
+
+    public int getCount() {
+        return ratings.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
