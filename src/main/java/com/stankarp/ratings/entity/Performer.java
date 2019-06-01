@@ -12,7 +12,7 @@ import java.util.Set;
 public class Performer extends ResourceSupport {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long performerId;
 
     @Column(nullable = false, length = 200, unique = true)

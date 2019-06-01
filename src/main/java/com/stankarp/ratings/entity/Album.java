@@ -12,7 +12,7 @@ import java.util.Set;
 public class Album extends ResourceSupport {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long albumId;
 
     @Column(nullable = false, length = 200, name="title")

@@ -37,75 +37,34 @@ public class RatingsApplication {
 		SpringApplication.run(RatingsApplication.class, args);
 	}
 
-    private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private static SecureRandom rnd = new SecureRandom();
-
-    private String randomString(int len){
-        StringBuilder sb = new StringBuilder( len );
-        for( int i = 0; i < len; i++ )
-            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-        return sb.toString();
-    }
-
     @Bean
-	ApplicationRunner init(AlbumRepository albumRepository, PerformerRepository performerRepository,
-                           RatingRepository ratingRepository, RoleRepository roleRepository,
-                           UserRepository userRepository) {
+	ApplicationRunner init(RoleRepository roleRepository, UserRepository userRepository) {
         return args -> {
 
-            // ROLES
-            Role role1 = new Role(RoleName.ROLE_ADMIN);
-            Role role2 = new Role(RoleName.ROLE_PM);
-            Role role3 = new Role(RoleName.ROLE_USER);
+            Role role1 = roleRepository.findByName(RoleName.ROLE_ADMIN).orElse(new Role(RoleName.ROLE_ADMIN));
+            Role role3 = roleRepository.findByName(RoleName.ROLE_USER).orElse(new Role(RoleName.ROLE_USER));
 
             roleRepository.save(role1);
-            roleRepository.save(role2);
             roleRepository.save(role3);
 
+
             // USERS
-            User user1 = new User("admin", encoder.encode("admin123"));
-            User user2 = new User("admin-user", encoder.encode("admin-user123"));
-            User user3 = new User("user", encoder.encode("user123"));
-            List<User> users = Stream.of(user1, user2, user3).collect(Collectors.toList());
+            if (!userRepository.findByUsername("admin").isPresent()) {
+                User user = new User("admin", encoder.encode("Passw0rd"));
+                user.setRoles(Stream.of(role1).collect(Collectors.toSet()));
+                userRepository.save(user);
+            }
 
-            user1.setRoles(Stream.of(role1).collect(Collectors.toSet()));
-            user2.setRoles(Stream.of(role1, role3).collect(Collectors.toSet()));
-            user3.setRoles(Stream.of(role3).collect(Collectors.toSet()));
+            if (!userRepository.findByUsername("admin-user").isPresent()) {
+                User user = new User("admin-user", encoder.encode("Passw0rd"));
+                user.setRoles(Stream.of(role1, role3).collect(Collectors.toSet()));
+                userRepository.save(user);
+            }
 
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.save(user3);
-
-            // PERFORMERS
-            Performer performer1 = new Performer("The Beatles");
-            Performer performer2 = new Performer("Neil Young");
-            Performer performer3 = new Performer("Pink Floyd");
-            Performer performer4 = new Performer("Cure");
-            List<Performer> performers = Stream.of(performer1, performer2, performer3, performer4)
-                    .collect(Collectors.toList());
-
-            performerRepository.save(performer1);
-            performerRepository.save(performer2);
-            performerRepository.save(performer3);
-            performerRepository.save(performer4);
-
-            // ALBUMS
-            for (int i = 0; i < 50; i++) {
-                String title = randomString(10);
-                Performer performer = performers.get(rnd.nextInt(performers.size()));
-                Album album = new Album(title, rnd.nextInt(50) + 1950, performer);
-                albumRepository.save(album);
-                performer.addAlbum(album);
-
-                for (int j = 0; j < rnd.nextInt(3); j ++) {
-                    User user = users.get(rnd.nextInt(users.size()));
-                    Rating rating = new Rating(user, rnd.nextDouble() * 10., "", album);
-                    ratingRepository.save(rating);
-                    album.addRating(rating);
-                }
-                albumRepository.save(album);
-                performerRepository.save(performer);
-
+            if (!userRepository.findByUsername("test-user").isPresent()) {
+                User user = new User("test-user", encoder.encode("Passw0rd"));
+                user.setRoles(Stream.of(role3).collect(Collectors.toSet()));
+                userRepository.save(user);
             }
         };
 	}
