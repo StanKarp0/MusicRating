@@ -14,8 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
 @CrossOrigin(origins = "*")
+@RequestMapping("/users")
 public class UserController {
 
     private UserRepository userRepository;
@@ -24,7 +24,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(PerformerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "", produces = {"application/json"})
@@ -33,13 +33,19 @@ public class UserController {
         Page<UserResponse> page = userRepository.findUserStats(pageable);
         return assembler.toResource(page);
     }
-//
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "query", produces = {"application/json"})
     public PagedResources<Resource<UserResponse>> query(@PageableDefault Pageable pageable, @RequestParam String query,
                                                         PagedResourcesAssembler<UserResponse> assembler) {
         Page<UserResponse> page = userRepository.findUserStatsQuery(query, pageable);
         return assembler.toResource(page);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(path = "/remove", produces = {"application/json"})
+    public void remove(@RequestParam String username) {
+        userRepository.findByUsername(username).ifPresent(user -> userRepository.delete(user));
     }
 }
 

@@ -1,35 +1,33 @@
 package com.stankarp.ratings.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.validation.Valid;
-
 import com.stankarp.ratings.entity.Role;
 import com.stankarp.ratings.entity.RoleName;
 import com.stankarp.ratings.entity.User;
 import com.stankarp.ratings.message.request.LoginForm;
+import com.stankarp.ratings.message.request.RoleForm;
 import com.stankarp.ratings.message.request.SignUpForm;
 import com.stankarp.ratings.message.response.JwtResponse;
 import com.stankarp.ratings.message.response.ResponseMessage;
 import com.stankarp.ratings.repository.RoleRepository;
 import com.stankarp.ratings.repository.UserRepository;
 import com.stankarp.ratings.security.jwt.JwtProvider;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -50,6 +48,8 @@ public class AuthRestAPIs {
 
     @Autowired
     private JwtProvider jwtProvider;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthRestAPIs.class);
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
@@ -72,28 +72,55 @@ public class AuthRestAPIs {
                     HttpStatus.BAD_REQUEST);
         }
 
-
         // Creating user's account
         User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        strRoles.forEach(role -> {
-            if ("admin".equals(role)) {
-                Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(adminRole);
-            } else {
-                Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(userRole);
-            }
+        strRoles.forEach(roleStr -> {
+            try {
+                roles.add(getRole(roleStr));
+            } catch (RuntimeException ignored) { }
         });
 
         user.setRoles(roles);
         userRepository.save(user);
 
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
+    }
+
+    private Role getRole(String roleStr) {
+        try {
+            RoleName name = RoleName.valueOf(roleStr);
+            return roleRepository.findByName(name)
+                    .orElseThrow(() -> new RuntimeException("Fail! -> Cause: Role not find."));
+        } catch (IllegalArgumentException ignored) {
+            throw new RuntimeException("Fail! -> Cause: Role not find.");
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/revoke", produces = {"application/json"})
+    public User revoke(@Valid @RequestBody RoleForm roleForm) {
+        logger.info(roleForm.toString());
+        User user = userRepository.findByUsername(roleForm.getUsername())
+                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not find."));
+        logger.info(user.toString());
+        user.getRoles().remove(getRole(roleForm.getRole()));
+        logger.info(user.toString());
+        return userRepository.save(user);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/grand", produces = {"application/json"})
+    public User grand(@Valid @RequestBody RoleForm roleForm) {
+        logger.info(roleForm.toString());
+        User user = userRepository.findByUsername(roleForm.getUsername())
+                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not find."));
+        logger.info(user.toString());
+        user.getRoles().add(getRole(roleForm.getRole()));
+        logger.info(user.toString());
+        return userRepository.save(user);
     }
 }
