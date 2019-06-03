@@ -1,12 +1,10 @@
 package com.stankarp.ratings.controller;
 
 import com.stankarp.ratings.entity.Album;
+import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.service.AlbumService;
-import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +13,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -32,8 +32,6 @@ public class AlbumController {
 
     static private int PageLimit = 20;
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbumController.class);
-
     public AlbumController(AlbumService albumService, RepositoryEntityLinks entityLinks) {
         this.albumService = albumService;
         this.entityLinks = entityLinks;
@@ -48,13 +46,10 @@ public class AlbumController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public Resource<Album> save(@RequestBody AlbumForm albumForm, PagedResourcesAssembler<Album> assembler) {
-        logger.info(albumForm.toString());
-        Resource<Album> res = albumService.save(albumForm)
+        return albumService.save(albumForm)
                 .map(album -> addLinks(album, assembler))
                 .map(album -> new Resource<>(album))
-                .orElse(new Resource<>(new Album()));
-        logger.info(res.toString());
-        return res;
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "Cannot create album. "));
     }
 
     @GetMapping(path = "year/{year:[1-2][0-9]{3}}", produces = {"application/hal+json"})

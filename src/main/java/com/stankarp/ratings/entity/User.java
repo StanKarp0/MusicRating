@@ -1,5 +1,7 @@
 package com.stankarp.ratings.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -24,6 +26,7 @@ public class User {
     private String username;
 
     @NotBlank
+    @JsonIgnore
     @Size(min=6, max = 100)
     private String password;
 
