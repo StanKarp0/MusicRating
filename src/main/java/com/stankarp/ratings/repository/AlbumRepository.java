@@ -16,10 +16,6 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
-    Page<Album> findByYearBetween(Integer year1, Integer year2, Pageable pageable);
-
-    Page<Album> findByYear(Integer year, Pageable pageable);
-
     @Query("SELECT DISTINCT a.year / 10 FROM Album a ORDER BY a.year / 10")
     List<Integer> findDistinctDecades();
 
@@ -29,7 +25,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @RestResource()
     @Query("SELECT a FROM Album a WHERE UPPER(a.title) LIKE CONCAT('%',UPPER(?1),'%') or UPPER(a.performer.name) LIKE CONCAT('%',UPPER(?1),'%')")
     Page<Album> findByQuery(String query, Pageable pageable);
-
 
     @RestResource()
     @Query("SELECT a FROM Album a WHERE a.performer.performerId=?1")

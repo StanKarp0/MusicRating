@@ -14,13 +14,11 @@ public interface AlbumService {
 
     Collection<Album> findRandom(YearRangeHelper yearRangeHelper);
 
-    Page<Album> findAll(Pageable pageable, YearRangeHelper fromYear);
-
     List<Integer> findDecades();
 
     List<Integer> findYears(Integer decade);
 
-    Optional<Album> findOne(Long albumId);
+    Page<Album> findAll(Pageable pageable);
 
     Optional<Album> save(AlbumForm album);
 }

@@ -42,12 +42,8 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Page<Album> findAll(Pageable pageable, YearRangeHelper yearRangeHelper) {
-        if (yearRangeHelper.all())
-            return albumRepository.findAll(pageable);
-        else if (yearRangeHelper.isValid())
-            return albumRepository.findByYearBetween(yearRangeHelper.getLower(), yearRangeHelper.getUpper(), pageable);
-        return Page.empty();
+    public Page<Album> findAll(Pageable pageable) {
+        return albumRepository.findAll(pageable);
     }
 
     @Override
@@ -58,11 +54,6 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Integer> findYears(Integer decade) {
         return albumRepository.findDistinctByYearBetween(decade * 10, decade * 10 + 9);
-    }
-
-    @Override
-    public Optional<Album> findOne(Long albumId) {
-        return Optional.ofNullable(albumRepository.getOne(albumId));
     }
 
     @Override
