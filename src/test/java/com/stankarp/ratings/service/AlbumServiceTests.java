@@ -2,6 +2,8 @@ package com.stankarp.ratings.service;
 
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
+import com.stankarp.ratings.message.request.PerformerAlbumForm;
+import com.stankarp.ratings.message.request.PerformerForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.AlbumService;
@@ -11,11 +13,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,13 +29,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations="classpath:test.properties")
 public class AlbumServiceTests {
+
+    private static final Logger logger = LoggerFactory.getLogger(AlbumServiceTests.class);
 
     @TestConfiguration
     static class AlbumServiceImplTestContextConfiguration {
@@ -56,19 +69,30 @@ public class AlbumServiceTests {
 
     @Before
     public void setUp() {
-//        Performer performer = new Performer("performer1");
-//        Album alex = new Album("alex", 1992, performer);
-//
-//        Mockito.when(albumRepository.findById(alex.getAlbumId())).thenReturn(Optional.of(alex));
+        final Performer performer = new Performer("perf1");
+        List<Album> albums = IntStream.range(0, 100).mapToObj(i -> {
+            Album album = new Album("alb1" + i, 1910 + i, performer);
+            album.setAlbumId((long)i);
+            return album;
+        }).collect(Collectors.toList());
+        Mockito.when(albumRepository.findAll()).thenReturn(albums);
     }
 
-    // write test cases here
     @Test
-    public void whenValidName_thenEmployeeShouldBeFound() {
-//        String name = "alex";
-//
-//        assertThat(albumService.findAll(PageRequest.of(0, 1), YearRangeHelper.fromYear(1992))
-//                .get().findFirst().map(Album::getName))
-//                .isEqualTo(name);
+    public void whenFindRandom_thenReturnRandom() {
+        // given
+        YearRangeHelper yearRangeHelper = YearRangeHelper.allYears();
+
+        // when
+        Collection<Album> list1 = albumService.findRandom(yearRangeHelper);
+        Collection<Album> list2 = albumService.findRandom(yearRangeHelper);
+
+        // then
+        List<Long> ids1 = list1.stream().map(Album::getAlbumId).collect(Collectors.toList());
+        List<Long> ids2 = list2.stream().map(Album::getAlbumId).collect(Collectors.toList());
+
+        assertThat(ids1).doesNotContainSubsequence(ids2);
     }
+
+
 }

@@ -3,9 +3,11 @@ package com.stankarp.ratings.service;
 import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.message.request.PerformerAlbumForm;
 import com.stankarp.ratings.message.request.PerformerForm;
+import com.stankarp.ratings.message.request.PerformerUpdateForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.impl.PerformerServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PerformerServiceTests {
 
     @TestConfiguration
-    static class AlbumServiceImplTestContextConfiguration {
+    static class PerformerServiceTestsContextConfiguration {
 
         @Bean
         public PerformerService performerService(AlbumRepository albumRepository, PerformerRepository performerRepository) {
@@ -55,11 +57,12 @@ public class PerformerServiceTests {
 
     @Test
     public void whenSave_thenPerformerShouldBeFound() {
+        // given
         PerformerAlbumForm albumForm = new PerformerAlbumForm();
         albumForm.setTitle("asd1");
         albumForm.setYear(1992);
 
-        final String name = "test123";
+        final String name = "tests123";
         PerformerForm performerForm = new PerformerForm();
         performerForm.setName(name);
 
@@ -67,46 +70,33 @@ public class PerformerServiceTests {
         albums.add(albumForm);
         performerForm.setAlbums(albums);
 
+        // when
         Performer performerResult = performerService.save(performerForm);
-        assertThat(performerResult.getAlbumCount()).isEqualTo(albums.size());
-        assertThat(performerResult.getName()).isEqualTo(name);
 
-        Page<Performer> page = performerRepository.findByQuery(name, PageRequest.of(0, 10));
-        assertThat(page.getTotalPages()).isGreaterThan(0);
-        Optional<Performer> optionalPerformer = page.get().findAny();
-        assertThat(optionalPerformer.isPresent()).isTrue();
-        optionalPerformer.ifPresent(performer -> {
-            assertThat(performer.getAlbumCount()).isEqualTo(albums.size());
-            assertThat(performer.getName()).isEqualTo(name);
-        });
+        // then
+        assertThat(performerResult.getName()).isEqualTo(name);
     }
 
     @Test
     public void whenUpdate_thenPerformerShouldBeUpdated() {
-        PerformerAlbumForm albumForm = new PerformerAlbumForm();
-        albumForm.setTitle("asd1");
-        albumForm.setYear(1992);
-
-        final String name = "test123";
+        // given
+        final String name = "test1234";
+        final String updated = "1234test";
         PerformerForm performerForm = new PerformerForm();
         performerForm.setName(name);
 
-        final List<PerformerAlbumForm> albums = new LinkedList<>();
-        albums.add(albumForm);
-        performerForm.setAlbums(albums);
-
         Performer performerResult = performerService.save(performerForm);
-        assertThat(performerResult.getAlbumCount()).isEqualTo(albums.size());
         assertThat(performerResult.getName()).isEqualTo(name);
 
-        Page<Performer> page = performerRepository.findByQuery(name, PageRequest.of(0, 10));
-        assertThat(page.getTotalPages()).isGreaterThan(0);
-        Optional<Performer> optionalPerformer = page.get().findAny();
-        assertThat(optionalPerformer.isPresent()).isTrue();
-        optionalPerformer.ifPresent(performer -> {
-            assertThat(performer.getAlbumCount()).isEqualTo(albums.size());
-            assertThat(performer.getName()).isEqualTo(name);
-        });
+        PerformerUpdateForm updateForm = new PerformerUpdateForm();
+        updateForm.setPerformerId(performerResult.getPerformerId());
+        updateForm.setName(updated);
+
+        // when
+        Performer updatedPerformer = performerService.update(updateForm);
+
+        // then
+        assertThat(updatedPerformer.getName()).isEqualTo(updated);
     }
 
 }

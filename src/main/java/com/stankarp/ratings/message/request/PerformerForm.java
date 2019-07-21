@@ -2,6 +2,7 @@ package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PerformerForm {
@@ -11,7 +12,7 @@ public class PerformerForm {
     private String name;
 
     @NotBlank
-    private List<PerformerAlbumForm> albums;
+    private List<PerformerAlbumForm> albums = new LinkedList<>();
 
     public String getName() {
         return name;

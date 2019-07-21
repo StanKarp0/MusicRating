@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PerformerRepositoryTests {
 
     @TestConfiguration
-    static class AlbumServiceImplTestContextConfiguration {
+    static class PerformerRepositoryTestsContextConfiguration {
 
         @Bean
         public PasswordEncoder passwordEncoder() {

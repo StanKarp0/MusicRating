@@ -1,6 +1,7 @@
 package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 public class AlbumForm {
 
@@ -66,5 +67,21 @@ public class AlbumForm {
                 ", performerId=" + performerId +
                 ", albumId=" + albumId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AlbumForm albumForm = (AlbumForm) o;
+        return title.equals(albumForm.title) &&
+                year.equals(albumForm.year) &&
+                performerId.equals(albumForm.performerId) &&
+                albumId.equals(albumForm.albumId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, year, performerId, albumId);
     }
 }
