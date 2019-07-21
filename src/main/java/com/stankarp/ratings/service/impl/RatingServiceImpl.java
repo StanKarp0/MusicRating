@@ -6,6 +6,8 @@ import com.stankarp.ratings.repository.RatingRepository;
 import com.stankarp.ratings.repository.UserRepository;
 import com.stankarp.ratings.service.RatingService;
 import com.stankarp.ratings.message.request.RatingForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -39,6 +41,33 @@ public class RatingServiceImpl implements RatingService {
                         .flatMap(album -> userRepository.findByUsername(ratingForm.getUserName())
                                 .map(user -> new Rating(user, ratingForm.getRate(), ratingForm.getDescription(), album))))
                 .map(ratingRepository::save);
+    }
+
+    @Override
+    public Page<Rating> findAll(Pageable pageable) {
+        return ratingRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Rating> findByUser(String username, Pageable pageable) {
+        return ratingRepository.findByUserName(username, pageable);
+    }
+
+    @Override
+    public Page<Rating> findByAlbumId(long albumId, Pageable pageable) {
+        return ratingRepository.findByAlbum(albumId, pageable);
+    }
+
+    @Override
+    public Optional<Rating> findById(long ratingId) {
+        return ratingRepository.findById(ratingId);
+    }
+
+    @Override
+    public Optional<Rating> delete(long ratingId) {
+        Optional<Rating> rating = ratingRepository.findById(ratingId);
+        ratingRepository.deleteById(ratingId);
+        return rating;
     }
 
 }

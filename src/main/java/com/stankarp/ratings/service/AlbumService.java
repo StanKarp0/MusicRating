@@ -21,4 +21,10 @@ public interface AlbumService {
     Page<Album> findAll(Pageable pageable);
 
     Optional<Album> save(AlbumForm album);
+
+    Page<Album> findByQuery(String query, Pageable pageable);
+
+    Page<Album> findByPerformerId(long performerId, Pageable pageable);
+
+    Optional<Album> delete(long albumId);
 }

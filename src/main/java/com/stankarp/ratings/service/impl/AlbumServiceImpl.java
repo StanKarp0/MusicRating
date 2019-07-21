@@ -70,4 +70,21 @@ public class AlbumServiceImpl implements AlbumService {
                         .map(performer -> new Album(albumForm.getTitle(), albumForm.getYear(), performer)))
                 .map(albumRepository::save);
     }
+
+    @Override
+    public Page<Album> findByQuery(String query, Pageable pageable) {
+        return albumRepository.findByQuery(query, pageable);
+    }
+
+    @Override
+    public Page<Album> findByPerformerId(long performerId, Pageable pageable) {
+        return albumRepository.findByPerformerId(performerId, pageable);
+    }
+
+    @Override
+    public Optional<Album> delete(long albumId) {
+        Optional<Album> album = albumRepository.findById(albumId);
+        albumRepository.deleteById(albumId);
+        return album;
+    }
 }

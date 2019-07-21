@@ -2,6 +2,7 @@ package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 public class LoginForm {
 
@@ -29,4 +30,17 @@ public class LoginForm {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginForm loginForm = (LoginForm) o;
+        return Objects.equals(username, loginForm.username) &&
+                Objects.equals(password, loginForm.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
+    }
 }

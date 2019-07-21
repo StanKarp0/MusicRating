@@ -1,6 +1,7 @@
 package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 public class RoleForm {
 
@@ -41,5 +42,19 @@ public class RoleForm {
                 "role='" + role + '\'' +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoleForm roleForm = (RoleForm) o;
+        return Objects.equals(role, roleForm.role) &&
+                Objects.equals(username, roleForm.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(role, username);
     }
 }

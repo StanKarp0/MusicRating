@@ -3,6 +3,7 @@ package com.stankarp.ratings.message.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.DecimalMax;
+import java.util.Objects;
 
 public class RatingForm {
 
@@ -75,5 +76,22 @@ public class RatingForm {
                 ", ratingId=" + ratingId +
                 ", userName='" + userName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RatingForm that = (RatingForm) o;
+        return Objects.equals(description, that.description) &&
+                Objects.equals(rate, that.rate) &&
+                Objects.equals(albumId, that.albumId) &&
+                Objects.equals(ratingId, that.ratingId) &&
+                Objects.equals(userName, that.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, rate, albumId, ratingId, userName);
     }
 }

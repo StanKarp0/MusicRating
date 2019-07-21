@@ -1,9 +1,11 @@
 package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class PerformerForm {
 
@@ -11,7 +13,7 @@ public class PerformerForm {
     @Size(min = 1, max = 40)
     private String name;
 
-    @NotBlank
+    @NotEmpty
     private List<PerformerAlbumForm> albums = new LinkedList<>();
 
     public String getName() {
@@ -36,5 +38,19 @@ public class PerformerForm {
                 "name='" + name + '\'' +
                 ", albums=" + albums +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PerformerForm that = (PerformerForm) o;
+        return name.equals(that.name) &&
+                albums.equals(that.albums);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, albums);
     }
 }

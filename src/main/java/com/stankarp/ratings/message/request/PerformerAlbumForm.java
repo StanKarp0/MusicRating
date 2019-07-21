@@ -2,6 +2,7 @@ package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 public class PerformerAlbumForm {
 
@@ -34,6 +35,20 @@ public class PerformerAlbumForm {
                 "title='" + title + '\'' +
                 ", year=" + year +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PerformerAlbumForm that = (PerformerAlbumForm) o;
+        return year == that.year &&
+                Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, year);
     }
 }
 

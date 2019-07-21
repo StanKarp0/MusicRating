@@ -1,7 +1,10 @@
 package com.stankarp.ratings;
 
-import com.stankarp.ratings.entity.*;
-import com.stankarp.ratings.repository.*;
+import com.stankarp.ratings.entity.Role;
+import com.stankarp.ratings.entity.RoleName;
+import com.stankarp.ratings.entity.User;
+import com.stankarp.ratings.repository.RoleRepository;
+import com.stankarp.ratings.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.security.SecureRandom;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

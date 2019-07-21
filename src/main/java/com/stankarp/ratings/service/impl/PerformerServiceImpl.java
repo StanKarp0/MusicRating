@@ -8,6 +8,8 @@ import com.stankarp.ratings.message.request.PerformerUpdateForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
 import com.stankarp.ratings.service.PerformerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,13 +30,12 @@ public class PerformerServiceImpl implements PerformerService {
     public Performer save(PerformerForm performerForm) {
         Performer performer = new Performer(performerForm.getName());
         performerRepository.save(performer);
-        if (performer.getAlbums() != null) {
-            for (PerformerAlbumForm albumForm : performerForm.getAlbums()) {
-                Album album = new Album(albumForm.getTitle(), albumForm.getYear(), performer);
-                albumRepository.save(album);
-            }
-            performerRepository.save(performer);
+
+        for (PerformerAlbumForm albumForm : performerForm.getAlbums()) {
+            Album album = new Album(albumForm.getTitle(), albumForm.getYear(), performer);
+            albumRepository.save(album);
         }
+
         return performer;
     }
 
@@ -43,5 +44,27 @@ public class PerformerServiceImpl implements PerformerService {
         Performer performer = performerRepository.getOne(performerForm.getPerformerId());
         performer.setName(performerForm.getName());
         return performerRepository.save(performer);
+    }
+
+    @Override
+    public Optional<Performer> findById(long performerId) {
+        return performerRepository.findById(performerId);
+    }
+
+    @Override
+    public Page<Performer> findByQuery(String query, Pageable pageable) {
+        return performerRepository.findByQuery(query, pageable);
+    }
+
+    @Override
+    public Optional<Performer> delete(long performerId) {
+        Optional<Performer> performer = performerRepository.findById(performerId);
+        performerRepository.deleteById(performerId);
+        return performer;
+    }
+
+    @Override
+    public Page<Performer> findAll(Pageable pageable) {
+        return performerRepository.findAll(pageable);
     }
 }

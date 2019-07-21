@@ -1,5 +1,6 @@
 package com.stankarp.ratings.message.request;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.constraints.*;
@@ -38,5 +39,20 @@ public class SignUpForm {
 
     public void setRole(Set<String> role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SignUpForm that = (SignUpForm) o;
+        return Objects.equals(username, that.username) &&
+                Objects.equals(role, that.role) &&
+                Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, role, password);
     }
 }

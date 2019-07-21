@@ -2,11 +2,8 @@ package com.stankarp.ratings.service;
 
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
-import com.stankarp.ratings.message.request.PerformerAlbumForm;
-import com.stankarp.ratings.message.request.PerformerForm;
 import com.stankarp.ratings.repository.AlbumRepository;
 import com.stankarp.ratings.repository.PerformerRepository;
-import com.stankarp.ratings.service.AlbumService;
 import com.stankarp.ratings.service.impl.AlbumServiceImpl;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.junit.Before;
@@ -16,23 +13,16 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
