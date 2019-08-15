@@ -33,8 +33,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -128,5 +127,49 @@ public class AlbumControllerTests {
                 .andExpect(jsonPath("$.decade", is(123)))
                 .andExpect(jsonPath("$.average", is(0.0)))
                 .andExpect(jsonPath("$.ratingsCount", is(0)));
+    }
+
+    @Test
+    public void givenWrongAlbum_whenSaveAlbum_thenNotOk()
+            throws Exception {
+        AlbumForm albumForm = new AlbumForm(null, 1992, null, 1L);
+
+        given(albumService.save(albumForm)).willReturn(Optional.empty());
+
+        mvc.perform(post("/albums")
+                .content(objectMapper.writeValueAsString(albumForm))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("test").roles("USER"))
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenAlbum_whenDeleteAlbum_thenOk()
+            throws Exception {
+        final String name = "test123", title = "title123";
+        final int year = 1234;
+
+        Performer performer = new Performer(name);
+        performer.setPerformerId(1L);
+        Album album = new Album(title, year, performer);
+        album.setAlbumId(1L);
+
+        given(albumService.delete(1L)).willReturn(Optional.of(album));
+
+        mvc.perform(delete("/albums")
+                .param("albumId", "1")
+                .with(user("test").roles("USER"))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenWrongAlbum_whenDeleteAlbum_thenNotOk()
+            throws Exception {
+        given(albumService.delete(1L)).willReturn(Optional.empty());
+
+        mvc.perform(delete("/albums")
+                .param("albumId", "1")
+                .with(user("test").roles("USER"))
+        ).andExpect(status().is4xxClientError());
     }
 }

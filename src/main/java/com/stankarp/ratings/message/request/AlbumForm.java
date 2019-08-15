@@ -1,6 +1,7 @@
 package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class AlbumForm {
@@ -8,13 +9,12 @@ public class AlbumForm {
     @NotBlank
     private String title;
 
-    @NotBlank
+    @NotNull
     private Integer year;
 
-    @NotBlank
+    @NotNull
     private Long performerId;
 
-    @NotBlank
     private Long albumId;
 
     public AlbumForm() {

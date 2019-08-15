@@ -15,8 +15,6 @@ import com.stankarp.ratings.security.services.UserDetailsServiceImpl;
 import com.stankarp.ratings.service.PerformerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,16 +25,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,8 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(locations="classpath:test.properties")
 public class PerformerControllerTests {
-
-    private static final Logger logger = LoggerFactory.getLogger(PerformerControllerTests.class);
 
     @TestConfiguration
     static class PerformerControllerTestsContextConfiguration {
@@ -103,12 +98,9 @@ public class PerformerControllerTests {
         PerformerForm performerForm = getPerformerForm("ds", "dsd", 1992);
 
         // when save
-        MvcResult result = mvc.perform(post("/performers/save", performerForm)
+        mvc.perform(post("/performers", performerForm)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized()).andReturn();
-
-        logger.info(result.getRequest().toString());
-        logger.info(result.getResponse().toString());
     }
 
     @Test
@@ -124,7 +116,7 @@ public class PerformerControllerTests {
         given(performerService.save(performerForm)).willReturn(performer);
 
         // when save
-        mvc.perform(post("/performers/save")
+        mvc.perform(post("/performers")
                 .content(objectMapper.writeValueAsString(performerForm))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user("test").roles("USER"))
@@ -148,7 +140,7 @@ public class PerformerControllerTests {
         given(performerService.update(performerForm)).willReturn(performer);
 
         // when save
-        mvc.perform(put("/performers/save")
+        mvc.perform(put("/performers")
                 .content(objectMapper.writeValueAsString(performerForm))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user("test").roles("USER"))
@@ -172,16 +164,55 @@ public class PerformerControllerTests {
         given(performerService.update(performerForm)).willReturn(performer);
 
         // when save
-        mvc.perform(put("/performers/save")
+        mvc.perform(put("/performers")
                 .content(objectMapper.writeValueAsString(performerForm))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user("test").roles("USER"))
-        ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(name)))
-                .andExpect(jsonPath("$.performerId", is(1)))
-                .andExpect(jsonPath("$.albumCount", is(0)))
-                .andExpect(jsonPath("$.ratingsCount", is(0)))
-                .andExpect(jsonPath("$.average", is(0.0)));
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenPerformer_whenDeletePerformer_thenOk()
+            throws Exception {
+        final String name = "test123";
+
+        Performer performer = new Performer(name);
+        performer.setPerformerId(1L);
+
+        given(performerService.delete(1L)).willReturn(Optional.of(performer));
+
+        mvc.perform(delete("/performers")
+                .param("performerId", "1")
+                .with(user("test").roles("USER"))
+        ).andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void givenWrongPerformer_whenDeletePerformer_thenNotOk()
+            throws Exception {
+        mvc.perform(delete("/performers")
+                .param("performerId", "1")
+                .with(user("test").roles("USER"))
+        ).andExpect(status().is4xxClientError());
+    }
+
+
+    @Test
+    public void givenPerformer_whenDeletePerformerNoAuth_thenNotOk()
+            throws Exception {
+        mvc.perform(delete("/performers")
+                .param("performerId", "aa")
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenWrongPerformerId_whenDeletePerformer_thenNotOk()
+            throws Exception {
+        mvc.perform(delete("/performers")
+                .param("performerId", "aa")
+                .with(user("test").roles("USER"))
+        ).andExpect(status().is4xxClientError());
     }
 
 }
