@@ -4,6 +4,7 @@ import com.stankarp.ratings.entity.Rating;
 import com.stankarp.ratings.message.request.RatingForm;
 import com.stankarp.ratings.message.response.ResponseMessage;
 import com.stankarp.ratings.service.RatingService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,24 +30,32 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
+    private PagedResources<Resource<Rating>> handleNull(Page<Rating> ratings, String errorMsg,
+                                                        PagedResourcesAssembler<Rating> assembler) {
+        return Optional.ofNullable(ratings)
+                .filter(page -> !page.isEmpty())
+                .map(assembler::toResource)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg));
+    }
+
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Rating>> all(@PageableDefault Pageable pageable,
                                                 PagedResourcesAssembler<Rating> assembler) {
-        return assembler.toResource(ratingService.findAll(pageable));
+        return handleNull(ratingService.findAll(pageable), "No ratings at all", assembler);
     }
 
     @GetMapping(path={"user"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Rating>> user(@RequestParam String user,
                                                  @PageableDefault Pageable pageable,
                                                  PagedResourcesAssembler<Rating> assembler) {
-        return assembler.toResource(ratingService.findByUser(user, pageable));
+        return handleNull(ratingService.findByUser(user, pageable), "No ratings found for username.", assembler);
     }
 
     @GetMapping(path={"album"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Rating>> album(@RequestParam long albumId,
                                                   @PageableDefault Pageable pageable,
                                                   PagedResourcesAssembler<Rating> assembler) {
-        return assembler.toResource(ratingService.findByAlbumId(albumId, pageable));
+        return handleNull(ratingService.findByAlbumId(albumId, pageable), "No ratings for album", assembler);
     }
 
     @GetMapping(path = "{ratingId:[0-9]+}", produces = {"application/hal+json"})
@@ -56,7 +66,7 @@ public class RatingController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(path = "/save", produces = {"application/json"})
+    @PostMapping(path = {"", "/"}, produces = {"application/json"})
     public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm) {
         return ratingService.save(ratingForm)
                 .map(rating -> new Resource<>(rating))

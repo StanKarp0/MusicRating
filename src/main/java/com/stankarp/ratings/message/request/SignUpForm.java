@@ -11,6 +11,7 @@ public class SignUpForm {
     @Size(min = 3, max = 50)
     private String username;
 
+    @NotEmpty
     private Set<String> role;
 
     @NotBlank

@@ -2,6 +2,8 @@ package com.stankarp.ratings.utils;
 
 import com.stankarp.ratings.entity.Album;
 
+import java.util.Objects;
+
 public class YearRangeHelper {
 
 
@@ -58,4 +60,17 @@ public class YearRangeHelper {
         return lower != null && upper != null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        YearRangeHelper that = (YearRangeHelper) o;
+        return Objects.equals(lower, that.lower) &&
+                Objects.equals(upper, that.upper);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lower, upper);
+    }
 }

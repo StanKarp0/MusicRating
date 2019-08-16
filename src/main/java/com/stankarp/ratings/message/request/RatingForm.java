@@ -3,6 +3,7 @@ package com.stankarp.ratings.message.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class RatingForm {
@@ -10,15 +11,15 @@ public class RatingForm {
     @NotBlank
     private String description = "";
 
-    @NotBlank
+    @NotNull
     @DecimalMin(value = "0.1", inclusive = true)
     @DecimalMax(value = "9.9", inclusive = true)
     private Double rate;
 
-    @NotBlank
+    @NotNull
     private Long albumId;
 
-    @NotBlank
+    @NotNull
     private Long ratingId;
 
     @NotBlank
@@ -65,6 +66,17 @@ public class RatingForm {
 
     public void setUserName(String username) {
         this.userName = username;
+    }
+
+    public RatingForm(@NotBlank String description,
+                      @NotBlank @DecimalMin(value = "0.1", inclusive = true) @DecimalMax(value = "9.9", inclusive = true) Double rate,
+                      @NotBlank Long albumId, @NotBlank Long ratingId,
+                      @NotBlank String userName) {
+        this.description = description;
+        this.rate = rate;
+        this.albumId = albumId;
+        this.ratingId = ratingId;
+        this.userName = userName;
     }
 
     @Override
