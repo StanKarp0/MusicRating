@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -32,7 +33,10 @@ public class PerformerController {
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Performer>> findAll(@PageableDefault Pageable pageable,
                                                        PagedResourcesAssembler<Performer> assembler) {
-        return assembler.toResource(performerService.findAll(pageable));
+        return Optional.ofNullable(performerService.findAll(pageable))
+                .filter(page -> !page.isEmpty())
+                .map(assembler::toResource)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No performers found"));
     }
 
     @GetMapping(path = "{performerId:[0-9]+}", produces = {"application/hal+json"})
@@ -46,7 +50,10 @@ public class PerformerController {
     public PagedResources<Resource<Performer>> query(@RequestParam String query,
                                                      @PageableDefault Pageable pageable,
                                                      PagedResourcesAssembler<Performer> assembler) {
-        return assembler.toResource(performerService.findByQuery(query, pageable));
+        return Optional.ofNullable(performerService.findByQuery(query, pageable))
+                .filter(page -> !page.isEmpty())
+                .map(assembler::toResource)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No performers found"));
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

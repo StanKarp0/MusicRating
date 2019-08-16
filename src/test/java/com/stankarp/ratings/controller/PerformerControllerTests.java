@@ -3,6 +3,7 @@ package com.stankarp.ratings.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
+import com.stankarp.ratings.entity.Rating;
 import com.stankarp.ratings.message.request.PerformerAlbumForm;
 import com.stankarp.ratings.message.request.PerformerForm;
 import com.stankarp.ratings.message.request.PerformerUpdateForm;
@@ -21,6 +22,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -31,6 +35,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -90,6 +96,119 @@ public class PerformerControllerTests {
         performerForm.setAlbums(albums);
 
         return performerForm;
+    }
+
+    private List<Performer> getPerformers() {
+        List<Performer> performers = new LinkedList<>();
+
+        performers.add(new Performer("aa"));
+        performers.add(new Performer("ab"));
+        performers.add(new Performer("ac"));
+        performers.add(new Performer("ad"));
+
+        for (Performer performer: performers) {
+            performer.setPerformerId(1L);
+        }
+
+        return performers;
+    }
+
+    @Test
+    public void givenRatings_whenGetAll_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        List<Performer> performers = getPerformers();
+        given(performerService.findAll(PageRequest.of(page, size))).willReturn(new PageImpl<>(performers));
+
+        mvc.perform(get("/performers")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$._embedded.performers", hasSize(performers.size())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenRatings_whenGetEmptyAll_thenNotOk()
+            throws Exception {
+        int page = 0, size = 10;
+        given(performerService.findAll(PageRequest.of(page, size))).willReturn(new PageImpl<>(new LinkedList<>()));
+
+        mvc.perform(get("/performers")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenQuery_whenFindQuery_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        List<Performer> performers = getPerformers();
+        Page<Performer> performerPage = new PageImpl<>(performers);
+        given(performerService.findByQuery("aaa", PageRequest.of(page, size))).willReturn(performerPage);
+
+        mvc.perform(get("/performers/query")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .param("query", "aaa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenBadQuery_whenFindQuery_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/performers/query")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenQuery_whenFindEmptyQuery_thenNotOk()
+            throws Exception {
+        int page = 0, size = 10;
+        given(performerService.findByQuery("aaa", PageRequest.of(page, size))).willReturn(new PageImpl<>(new LinkedList<>()));
+
+        mvc.perform(get("/performers/query")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenPerformerId_whenFindPerformer_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        Performer performer = getPerformers().get(0);
+        performer.setPerformerId(1L);
+        given(performerService.findById(1L)).willReturn(Optional.of(performer));
+
+        mvc.perform(get("/performers/1")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenBadPerformerId_whenFindPerformer_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/performers/aa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenNotExistingPerformerId_whenFindPerformer_thenNotOk()
+            throws Exception {
+        given(performerService.findById(2L)).willReturn(Optional.empty());
+
+        mvc.perform(get("/performers/2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
