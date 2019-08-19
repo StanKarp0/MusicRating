@@ -27,6 +27,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -97,6 +99,97 @@ public class AlbumControllerTests {
                 .andExpect(jsonPath("$._embedded.albums[0].name", is(name)))
                 .andExpect(jsonPath("$._embedded.albums[0].title", is(title)))
                 .andExpect(jsonPath("$._embedded.albums[0].year", is(year)));
+    }
+
+    @Test
+    public void givenQuery_whenFindQuery_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        List<Album> albums = new LinkedList<>();
+        Performer performer = new Performer("bbb");
+        albums.add(new Album("ss", 1992, performer));
+        Page<Album> albumsPage = new PageImpl<>(albums);
+        given(albumService.findByQuery("aaa", PageRequest.of(page, size))).willReturn(albumsPage);
+
+        mvc.perform(get("/albums/query")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .param("query", "aaa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenBadQuery_whenFindQuery_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/albums/query")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenQuery_whenFindEmptyQuery_thenNotOk()
+            throws Exception {
+        int page = 0, size = 10;
+        given(albumService.findByQuery("aaa", PageRequest.of(page, size)))
+                .willReturn(new PageImpl<>(new LinkedList<>()));
+
+        mvc.perform(get("/albums/query")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenPerformerId_whenFindPerformer_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        List<Album> albums = new LinkedList<>();
+        Performer performer = new Performer("bbb");
+        albums.add(new Album("ss", 1992, performer));
+        Page<Album> albumsPage = new PageImpl<>(albums);
+        given(albumService.findByPerformerId(1L, PageRequest.of(page, size))).willReturn(albumsPage);
+
+        mvc.perform(get("/albums/performer")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .param("performerId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenBadPerformerId_whenFindPerformer_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/albums/performer")
+                .param("performerId", "aa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenNotExistingPerformerId_whenFindPerformer_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/albums/performer")
+                .param("performerId", "2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenPerformerId_whenFindEmptyPerformer_thenNotOk()
+            throws Exception {
+        int page = 0, size = 10;
+        given(albumService.findByPerformerId(1L, PageRequest.of(page, size)))
+                .willReturn(new PageImpl<>(new LinkedList<>()));
+
+        mvc.perform(get("/albums/performer")
+                .param("performerId", "1")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

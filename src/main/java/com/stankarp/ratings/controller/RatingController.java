@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -67,7 +68,9 @@ public class RatingController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = {"", "/"}, produces = {"application/json"})
-    public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm) {
+    public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm,
+                                 Principal principal) {
+//        principal.getName()
         return ratingService.save(ratingForm)
                 .map(rating -> new Resource<>(rating))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot save rating"));

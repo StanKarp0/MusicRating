@@ -4,6 +4,7 @@ import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.message.response.ResponseMessage;
 import com.stankarp.ratings.service.AlbumService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -29,24 +30,32 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
+    private PagedResources<Resource<Album>> handleNull(Page<Album> ratings, String errorMsg,
+                                                        PagedResourcesAssembler<Album> assembler) {
+        return Optional.ofNullable(ratings)
+                .filter(page -> !page.isEmpty())
+                .map(assembler::toResource)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg));
+    }
+
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Album>> all(@PageableDefault Pageable pageable,
                                                 PagedResourcesAssembler<Album> assembler) {
-        return assembler.toResource(albumService.findAll(pageable));
+        return handleNull(albumService.findAll(pageable), "No albums found", assembler);
     }
 
     @GetMapping(path={"query"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Album>> query(@RequestParam String query,
                                                  @PageableDefault Pageable pageable,
                                                  PagedResourcesAssembler<Album> assembler) {
-        return assembler.toResource(albumService.findByQuery(query, pageable));
+        return handleNull(albumService.findByQuery(query, pageable), "No albums found", assembler);
     }
 
     @GetMapping(path={"performer"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Album>> performer(@RequestParam long performerId,
                                                      @PageableDefault Pageable pageable,
                                                      PagedResourcesAssembler<Album> assembler) {
-        return assembler.toResource(albumService.findByPerformerId(performerId, pageable));
+        return handleNull(albumService.findByPerformerId(performerId, pageable), "No albums", assembler);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

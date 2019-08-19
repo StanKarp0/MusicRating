@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/remove", produces = {"application/json"})
+    @DeleteMapping(path = "", produces = {"application/json"})
     public ResponseEntity<?> remove(@RequestParam String username) {
         return userRepository.findByUsername(username).map(user -> {
             userRepository.delete(user);
