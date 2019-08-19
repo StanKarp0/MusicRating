@@ -56,4 +56,13 @@ public class SignUpForm {
     public int hashCode() {
         return Objects.hash(username, role, password);
     }
+
+    public SignUpForm(@NotBlank @Size(min = 3, max = 50) String username, @NotEmpty Set<String> role, @NotBlank @Size(min = 6, max = 40) String password) {
+        this.username = username;
+        this.role = role;
+        this.password = password;
+    }
+
+    public SignUpForm() {
+    }
 }

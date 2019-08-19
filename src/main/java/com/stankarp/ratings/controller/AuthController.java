@@ -15,32 +15,32 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/auth")
-public class AuthRestAPIs {
+public class AuthController {
 
     private UserService userService;
 
-    public AuthRestAPIs(UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/signin")
+    @PostMapping("signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
         return ResponseEntity.ok(userService.authenticateUser(loginRequest));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         return ResponseEntity.ok(userService.registerUser(signUpRequest));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/revoke", produces = {"application/json"})
+    @PutMapping(path = "revoke", produces = {"application/json"})
     public Resource<User> revoke(@Valid @RequestBody RoleForm roleForm) {
         return new Resource<>(userService.revoke(roleForm));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/grand", produces = {"application/json"})
+    @PutMapping(path = "grand", produces = {"application/json"})
     public Resource<User> grand(@Valid @RequestBody RoleForm roleForm) {
         return new Resource<>(userService.grand(roleForm));
     }

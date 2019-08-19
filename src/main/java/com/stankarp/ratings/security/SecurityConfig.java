@@ -58,11 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/ratings", "/ratings/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/performers", "/performers/**").permitAll()
+                .antMatchers("/auth/signin", "/auth/signup").permitAll()
+                .antMatchers(HttpMethod.GET,"/ratings", "/ratings/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/performers", "/performers/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/albums", "/albums/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/users", "/users/search/findByUsername").permitAll()
                 .antMatchers(HttpMethod.GET,"/", "/decade/**", "/year/**", "/years/**/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

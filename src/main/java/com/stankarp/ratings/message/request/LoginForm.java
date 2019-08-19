@@ -43,4 +43,12 @@ public class LoginForm {
     public int hashCode() {
         return Objects.hash(username, password);
     }
+
+    public LoginForm(@NotBlank @Size(min = 3, max = 60) String username, @NotBlank @Size(min = 6, max = 40) String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public LoginForm() {
+    }
 }
