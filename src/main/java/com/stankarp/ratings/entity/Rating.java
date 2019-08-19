@@ -31,6 +31,11 @@ public class Rating extends ResourceSupport {
     public Rating() {
     }
 
+    public Rating(User user, Album album) {
+        this.user = user;
+        this.album = album;
+    }
+
     public Rating(User user, Double rate, String description, Album album) {
         this.user = user;
         this.rate = rate;

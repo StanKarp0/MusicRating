@@ -22,9 +22,6 @@ public class RatingForm {
     @NotNull
     private Long ratingId;
 
-    @NotBlank
-    private String userName;
-
     public RatingForm() {
     }
 
@@ -60,23 +57,13 @@ public class RatingForm {
         this.ratingId = ratingId;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String username) {
-        this.userName = username;
-    }
-
     public RatingForm(@NotBlank String description,
                       @NotBlank @DecimalMin(value = "0.1", inclusive = true) @DecimalMax(value = "9.9", inclusive = true) Double rate,
-                      @NotBlank Long albumId, @NotBlank Long ratingId,
-                      @NotBlank String userName) {
+                      @NotBlank Long albumId, @NotBlank Long ratingId) {
         this.description = description;
         this.rate = rate;
         this.albumId = albumId;
         this.ratingId = ratingId;
-        this.userName = userName;
     }
 
     @Override
@@ -85,8 +72,7 @@ public class RatingForm {
                 "description='" + description + '\'' +
                 ", rate=" + rate +
                 ", albumId=" + albumId +
-                ", ratingId=" + ratingId +
-                ", userName='" + userName + '\'' +
+                ", ratingId=" + ratingId  + '\'' +
                 '}';
     }
 
@@ -98,12 +84,11 @@ public class RatingForm {
         return Objects.equals(description, that.description) &&
                 Objects.equals(rate, that.rate) &&
                 Objects.equals(albumId, that.albumId) &&
-                Objects.equals(ratingId, that.ratingId) &&
-                Objects.equals(userName, that.userName);
+                Objects.equals(ratingId, that.ratingId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, rate, albumId, ratingId, userName);
+        return Objects.hash(description, rate, albumId, ratingId);
     }
 }

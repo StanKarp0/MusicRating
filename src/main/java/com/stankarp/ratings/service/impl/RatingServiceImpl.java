@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -28,19 +29,23 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Optional<Rating> save(RatingForm ratingForm) {
-        return Optional.ofNullable(ratingForm.getRatingId())
-                .map(ratingRepository::getOne)
-                .map(rating -> {
+    public Optional<Rating> save(RatingForm ratingForm, String username) {
+
+        return Optional.ofNullable(username)
+                .flatMap(name -> userRepository.findByUsername(name))
+                .flatMap(user -> Optional.ofNullable(ratingForm.getRatingId())
+                        .map(ratingRepository::getOne)
+                        .map(Optional::of)
+                        .orElse(Optional.ofNullable(ratingForm.getAlbumId())
+                                .flatMap(albumId -> Optional.ofNullable(albumRepository.getOne(albumId)))
+                                .map(album -> new Rating(user, album)))
+                        .filter(rating -> user.equals(rating.getUser()))
+                ).map(rating -> {
                     rating.setRate(ratingForm.getRate());
                     rating.setDescription(ratingForm.getDescription());
-                    return rating;})
-                .map(Optional::of)
-                .orElse(Optional.ofNullable(ratingForm.getAlbumId())
-                        .map(albumRepository::getOne)
-                        .flatMap(album -> userRepository.findByUsername(ratingForm.getUserName())
-                                .map(user -> new Rating(user, ratingForm.getRate(), ratingForm.getDescription(), album))))
-                .map(ratingRepository::save);
+                    ratingRepository.save(rating);
+                    return rating;
+                });
     }
 
     @Override

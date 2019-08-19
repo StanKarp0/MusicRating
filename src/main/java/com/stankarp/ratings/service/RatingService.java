@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RatingService {
 
-    Optional<Rating> save(RatingForm ratingForm);
+    Optional<Rating> save(RatingForm ratingForm, String username);
 
     Page<Rating> findAll(Pageable pageable);
 

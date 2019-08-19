@@ -29,17 +29,16 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -208,39 +207,41 @@ public class RatingControllerTests {
     @Test
     public void givenRating_whenSaveRating_thenReturnJsonObject()
             throws Exception {
-        Rating rating = getRatings("john").get(0);
-        RatingForm form = new RatingForm(rating.getDescription(), rating.getRate(), 1L, 1L,
-                rating.getUserName());
+        String username = "johnaaa";
+        Rating rating = getRatings(username).get(0);
+        RatingForm form = new RatingForm(rating.getDescription(), rating.getRate(), 1L, 1L);
 
-        given(ratingService.save(form)).willReturn(Optional.of(rating));
+        given(ratingService.save(form, username)).willReturn(Optional.of(rating));
 
         mvc.perform(post("/ratings")
                 .content(objectMapper.writeValueAsString(form))
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user("test").roles("USER"))
+                .with(user(username).roles("USER"))
         ).andExpect(status().isOk());
     }
 
     @Test
     public void givenRatingForm_whenCanotSave_thenNotOk()
             throws Exception {
-        RatingForm form = new RatingForm("d", 3.3, 1L, 1L, "user");
+        String username = "johnaaa";
+        RatingForm form = new RatingForm("d", 3.3, 1L, 1L);
 
-        given(ratingService.save(ArgumentMatchers.any(RatingForm.class))).willReturn(Optional.empty());
+        given(ratingService.save(form, username)).willReturn(Optional.empty());
 
         mvc.perform(post("/ratings")
                 .content(objectMapper.writeValueAsString(form))
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user("test").roles("USER"))
+                .with(user(username).roles("USER"))
         ).andExpect(status().is4xxClientError());
     }
 
     @Test
     public void givenRatingForm_whenNoCred_thenNotOk()
             throws Exception {
-        RatingForm form = new RatingForm("d", 3.3, 1L, 1L, "user");
+        String username = "aaaaaaa";
+        RatingForm form = new RatingForm("d", 3.3, 1L, 1L);
 
-        given(ratingService.save(ArgumentMatchers.any(RatingForm.class))).willReturn(Optional.empty());
+        given(ratingService.save(form, username)).willReturn(Optional.empty());
 
         mvc.perform(post("/ratings")
                 .content(objectMapper.writeValueAsString(form))
@@ -252,15 +253,13 @@ public class RatingControllerTests {
     public void givenNotValidRatingForm_whenSaveRating_thenNotOk()
             throws Exception {
         List<RatingForm> ratingForms = new LinkedList<>();
-        ratingForms.add(new RatingForm(null, 3.3, 1L, 1L, "user"));
-        ratingForms.add(new RatingForm("", 3.3, 1L, 1L, "user"));
-        ratingForms.add(new RatingForm("d", -1.3, 1L, 1L, "user"));
-        ratingForms.add(new RatingForm("d", 10.3, 1L, 1L, "user"));
-        ratingForms.add(new RatingForm("d", null, 1L, 1L, "user"));
-        ratingForms.add(new RatingForm("d", 3.3, null, 1L, "user"));
-        ratingForms.add(new RatingForm("d", 3.3, 1L, null, "user"));
-        ratingForms.add(new RatingForm("d", 3.3, 1L, 1L, ""));
-        ratingForms.add(new RatingForm("d", 3.3, 1L, 1L, null));
+        ratingForms.add(new RatingForm(null, 3.3, 1L, 1L));
+        ratingForms.add(new RatingForm("", 3.3, 1L, 1L));
+        ratingForms.add(new RatingForm("d", -1.3, 1L, 1L));
+        ratingForms.add(new RatingForm("d", 10.3, 1L, 1L));
+        ratingForms.add(new RatingForm("d", null, 1L, 1L));
+        ratingForms.add(new RatingForm("d", 3.3, null, 1L));
+        ratingForms.add(new RatingForm("d", 3.3, 1L, null));
 
         for (RatingForm form: ratingForms) {
             mvc.perform(post("/ratings")

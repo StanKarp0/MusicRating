@@ -1,17 +1,12 @@
 package com.stankarp.ratings.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stankarp.ratings.entity.Album;
-import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.entity.User;
-import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.message.response.UserResponse;
 import com.stankarp.ratings.repository.RoleRepository;
 import com.stankarp.ratings.repository.UserRepository;
 import com.stankarp.ratings.security.jwt.JwtAuthEntryPoint;
 import com.stankarp.ratings.security.jwt.JwtProvider;
 import com.stankarp.ratings.security.services.UserDetailsServiceImpl;
-import com.stankarp.ratings.service.AlbumService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +23,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)

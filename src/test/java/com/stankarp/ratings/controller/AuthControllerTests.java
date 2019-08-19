@@ -1,10 +1,7 @@
 package com.stankarp.ratings.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stankarp.ratings.entity.Album;
-import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.entity.User;
-import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.message.request.LoginForm;
 import com.stankarp.ratings.message.request.RoleForm;
 import com.stankarp.ratings.message.request.SignUpForm;
@@ -15,7 +12,6 @@ import com.stankarp.ratings.repository.UserRepository;
 import com.stankarp.ratings.security.jwt.JwtAuthEntryPoint;
 import com.stankarp.ratings.security.jwt.JwtProvider;
 import com.stankarp.ratings.security.services.UserDetailsServiceImpl;
-import com.stankarp.ratings.service.AlbumService;
 import com.stankarp.ratings.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,22 +21,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)

@@ -70,8 +70,7 @@ public class RatingController {
     @PostMapping(path = {"", "/"}, produces = {"application/json"})
     public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm,
                                  Principal principal) {
-//        principal.getName()
-        return ratingService.save(ratingForm)
+        return ratingService.save(ratingForm, principal.getName())
                 .map(rating -> new Resource<>(rating))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot save rating"));
     }

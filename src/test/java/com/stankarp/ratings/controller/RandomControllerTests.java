@@ -1,6 +1,5 @@
 package com.stankarp.ratings.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
 import com.stankarp.ratings.repository.AlbumRepository;
@@ -29,7 +28,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;

@@ -3,7 +3,6 @@ package com.stankarp.ratings.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stankarp.ratings.entity.Album;
 import com.stankarp.ratings.entity.Performer;
-import com.stankarp.ratings.entity.Rating;
 import com.stankarp.ratings.message.request.PerformerAlbumForm;
 import com.stankarp.ratings.message.request.PerformerForm;
 import com.stankarp.ratings.message.request.PerformerUpdateForm;
@@ -36,7 +35,6 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
