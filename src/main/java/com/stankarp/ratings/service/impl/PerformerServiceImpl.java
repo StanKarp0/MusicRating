@@ -40,10 +40,11 @@ public class PerformerServiceImpl implements PerformerService {
     }
 
     @Override
-    public Performer update(PerformerUpdateForm performerForm) {
-        Performer performer = performerRepository.getOne(performerForm.getPerformerId());
-        performer.setName(performerForm.getName());
-        return performerRepository.save(performer);
+    public Optional<Performer> update(PerformerUpdateForm performerForm) {
+        return performerRepository.findById(performerForm.getPerformerId()).map(performer -> {
+            performer.setName(performerForm.getName());
+            return performer;
+        });
     }
 
     @Override

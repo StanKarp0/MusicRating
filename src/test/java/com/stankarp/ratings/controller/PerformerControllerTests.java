@@ -254,7 +254,7 @@ public class PerformerControllerTests {
         Performer performer = new Performer(name);
         performer.setPerformerId(id);
 
-        given(performerService.update(performerForm)).willReturn(performer);
+        given(performerService.update(performerForm)).willReturn(Optional.of(performer));
 
         // when save
         mvc.perform(put("/performers")
@@ -270,6 +270,25 @@ public class PerformerControllerTests {
     }
 
     @Test
+    public void givenPerformersAuth_whenUpdateFail_thenIsOk() throws Exception {
+        // given
+        long id = 1L;
+        String name = "test1";
+        PerformerUpdateForm performerForm = new PerformerUpdateForm(id, name);
+        Performer performer = new Performer(name);
+        performer.setPerformerId(id);
+
+        given(performerService.update(performerForm)).willReturn(Optional.empty());
+
+        // when save
+        mvc.perform(put("/performers")
+                .content(objectMapper.writeValueAsString(performerForm))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("test").roles("USER"))
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
     public void givenBadForm_whenUpdate_thenIsNotOk() throws Exception {
         // given
         long id = 1L;
@@ -278,7 +297,7 @@ public class PerformerControllerTests {
         Performer performer = new Performer(name);
         performer.setPerformerId(id);
 
-        given(performerService.update(performerForm)).willReturn(performer);
+        given(performerService.update(performerForm)).willReturn(Optional.of(performer));
 
         // when save
         mvc.perform(put("/performers")

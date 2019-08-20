@@ -1,6 +1,7 @@
 package com.stankarp.ratings.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stankarp.ratings.entity.RoleName;
 import com.stankarp.ratings.entity.User;
 import com.stankarp.ratings.message.request.LoginForm;
 import com.stankarp.ratings.message.request.RoleForm;
@@ -22,16 +23,20 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,7 +84,9 @@ public class AuthControllerTests {
             throws Exception {
         String username = "john";
         LoginForm loginForm = new LoginForm(username, "aaaaaaaaa");
-        JwtResponse jwtResponse = new JwtResponse("a", username, new LinkedList<>());
+        List<GrantedAuthority> authorities = new LinkedList<>();
+        authorities.add(new SimpleGrantedAuthority(RoleName.ROLE_USER.name()));
+        JwtResponse jwtResponse = new JwtResponse("a", username, authorities);
 
         given(userService.authenticateUser(loginForm)).willReturn(jwtResponse);
 

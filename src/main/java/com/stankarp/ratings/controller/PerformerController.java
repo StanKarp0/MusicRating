@@ -65,7 +65,8 @@ public class PerformerController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(path = "", produces = {"application/json"})
     public Resource<Performer> update(@RequestBody @Valid PerformerUpdateForm performerForm) {
-        return new Resource<>(performerService.update(performerForm));
+        return performerService.update(performerForm).map(performer -> new Resource<>(performer)
+        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot update performer"));
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

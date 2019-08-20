@@ -59,14 +59,14 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Optional<Album> save(AlbumForm albumForm) {
         return Optional.ofNullable(albumForm.getAlbumId())
-                .map(albumRepository::getOne)
+                .flatMap(albumRepository::findById)
                 .map(album -> {
                     album.setTitle(albumForm.getTitle());
                     album.setYear(albumForm.getYear());
                     return album;})
                 .map(Optional::of)
                 .orElse(Optional.ofNullable(albumForm.getPerformerId())
-                        .map(performerRepository::getOne)
+                        .flatMap(performerRepository::findById)
                         .map(performer -> new Album(albumForm.getTitle(), albumForm.getYear(), performer)))
                 .map(albumRepository::save);
     }

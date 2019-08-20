@@ -34,10 +34,10 @@ public class RatingServiceImpl implements RatingService {
         return Optional.ofNullable(username)
                 .flatMap(name -> userRepository.findByUsername(name))
                 .flatMap(user -> Optional.ofNullable(ratingForm.getRatingId())
-                        .map(ratingRepository::getOne)
+                        .flatMap(ratingRepository::findById)
                         .map(Optional::of)
                         .orElse(Optional.ofNullable(ratingForm.getAlbumId())
-                                .flatMap(albumId -> Optional.ofNullable(albumRepository.getOne(albumId)))
+                                .flatMap(albumId -> albumRepository.findById(albumId))
                                 .map(album -> new Rating(user, album)))
                         .filter(rating -> user.equals(rating.getUser()))
                 ).map(rating -> {

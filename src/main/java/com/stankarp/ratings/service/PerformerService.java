@@ -12,7 +12,7 @@ public interface PerformerService {
 
     Performer save(PerformerForm performerForm);
 
-    Performer update(PerformerUpdateForm performerForm);
+    Optional<Performer> update(PerformerUpdateForm performerForm);
 
     Optional<Performer> findById(long performerId);
 
