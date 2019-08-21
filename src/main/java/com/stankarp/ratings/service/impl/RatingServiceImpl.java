@@ -17,7 +17,6 @@ import java.util.Optional;
 public class RatingServiceImpl implements RatingService {
 
     private AlbumRepository albumRepository;
-
     private RatingRepository ratingRepository;
     private UserRepository userRepository;
 

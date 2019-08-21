@@ -47,10 +47,10 @@ public class AlbumServiceTests {
             return new AlbumServiceImpl(albumRepository, performerRepository);
         }
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
+//        @Bean
+//        public PasswordEncoder passwordEncoder() {
+//            return new BCryptPasswordEncoder();
+//        }
     }
 
     @Autowired
