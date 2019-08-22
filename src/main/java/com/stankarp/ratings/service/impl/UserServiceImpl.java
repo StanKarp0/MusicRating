@@ -73,11 +73,7 @@ public class UserServiceImpl implements UserService {
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        strRoles.forEach(roleStr -> {
-            try {
-                roles.add(getRole(roleStr));
-            } catch (RuntimeException ignored) { }
-        });
+        strRoles.forEach(roleStr -> roles.add(getRole(roleStr)));
 
         user.setRoles(roles);
         userRepository.save(user);
