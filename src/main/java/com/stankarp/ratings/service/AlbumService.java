@@ -5,6 +5,7 @@ import com.stankarp.ratings.message.request.AlbumForm;
 import com.stankarp.ratings.utils.YearRangeHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Resource;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface AlbumService {
     Page<Album> findByPerformerId(long performerId, Pageable pageable);
 
     Optional<Album> delete(long albumId);
+
+    Optional<Album> findById(long albumId);
 }

@@ -87,4 +87,9 @@ public class AlbumServiceImpl implements AlbumService {
         albumRepository.deleteById(albumId);
         return album;
     }
+
+    @Override
+    public Optional<Album> findById(long albumId) {
+        return albumRepository.findById(albumId);
+    }
 }

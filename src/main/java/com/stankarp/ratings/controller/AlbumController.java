@@ -38,6 +38,13 @@ public class AlbumController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg));
     }
 
+    @GetMapping(path = "{albumId:[0-9]+}", produces = {"application/hal+json"})
+    public Resource<Album> findById(@PathVariable long albumId) {
+        return albumService.findById(albumId)
+                .map(album -> new Resource<>(album))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot find album."));
+    }
+
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
     public PagedResources<Resource<Album>> all(@PageableDefault Pageable pageable,
                                                 PagedResourcesAssembler<Album> assembler) {

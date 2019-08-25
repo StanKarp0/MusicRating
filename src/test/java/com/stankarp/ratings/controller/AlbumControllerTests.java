@@ -102,6 +102,37 @@ public class AlbumControllerTests {
     }
 
     @Test
+    public void givenAlbumId_whenFindAlbum_thenOk()
+            throws Exception {
+        Performer performer = new Performer("bbb");
+        Album album = new Album("ss", 1992, performer);
+        album.setAlbumId(1L);
+        given(albumService.findById(1L)).willReturn(Optional.of(album));
+
+        mvc.perform(get("/albums/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenBadAlbumId_whenFindAlbum_thenNotOk()
+            throws Exception {
+        mvc.perform(get("/albums/aa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void givenNotExistingAlbumId_whenFindAlbum_thenNotOk()
+            throws Exception {
+        given(albumService.findById(2L)).willReturn(Optional.empty());
+
+        mvc.perform(get("/albums/2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     public void givenQuery_whenFindQuery_thenOk()
             throws Exception {
         int page = 0, size = 10;

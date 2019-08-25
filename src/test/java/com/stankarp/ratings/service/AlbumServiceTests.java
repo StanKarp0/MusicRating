@@ -47,10 +47,6 @@ public class AlbumServiceTests {
             return new AlbumServiceImpl(albumRepository, performerRepository);
         }
 
-//        @Bean
-//        public PasswordEncoder passwordEncoder() {
-//            return new BCryptPasswordEncoder();
-//        }
     }
 
     @Autowired
@@ -156,6 +152,12 @@ public class AlbumServiceTests {
         Page<Album> result = albumService.findByPerformerId(1L, PageRequest.of(0, 10));
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
+    }
+
+    @Test
+    public void whenFindById_thenReturnAlbum() {
+        assertThat(albumService.findById(0L).isPresent()).isTrue();
+        assertThat(albumService.findById(1L).isPresent()).isFalse();
     }
 
     @Test

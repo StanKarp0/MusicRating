@@ -46,10 +46,6 @@ public class PerformerServiceTests {
             return new PerformerServiceImpl(performerRepository, albumRepository);
         }
 
-//        @Bean
-//        public PasswordEncoder passwordEncoder() {
-//            return new BCryptPasswordEncoder();
-//        }
     }
 
     @Autowired
