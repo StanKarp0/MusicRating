@@ -136,7 +136,7 @@ public class PerformerControllerTests {
                 .param("page", Integer.toString(page))
                 .param("size", Integer.toString(size))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -156,6 +156,21 @@ public class PerformerControllerTests {
     }
 
     @Test
+    public void givenQuery_whenFindEmptyQuery_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        Page<Performer> performerPage = new PageImpl<>(new LinkedList<>());
+        given(performerService.findByQuery("aaa", PageRequest.of(page, size))).willReturn(performerPage);
+
+        mvc.perform(get("/performers/query")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .param("query", "aaa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void givenBadQuery_whenFindQuery_thenNotOk()
             throws Exception {
         mvc.perform(get("/performers/query")
@@ -164,14 +179,10 @@ public class PerformerControllerTests {
     }
 
     @Test
-    public void givenQuery_whenFindEmptyQuery_thenNotOk()
+    public void givenNoQuery_whenFindQuery_thenNotOk()
             throws Exception {
-        int page = 0, size = 10;
-        given(performerService.findByQuery("aaa", PageRequest.of(page, size))).willReturn(new PageImpl<>(new LinkedList<>()));
 
         mvc.perform(get("/performers/query")
-                .param("page", Integer.toString(page))
-                .param("size", Integer.toString(size))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }

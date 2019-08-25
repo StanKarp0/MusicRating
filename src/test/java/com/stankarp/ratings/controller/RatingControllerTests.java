@@ -97,6 +97,20 @@ public class RatingControllerTests {
     }
 
     @Test
+    public void givenEmptyRatings_whenGetAll_thenOk()
+            throws Exception {
+        int page = 0, size = 10;
+        List<Rating> ratings = new LinkedList<>();
+        given(ratingService.findAll(PageRequest.of(0, 10))).willReturn(new PageImpl<>(ratings));
+
+        mvc.perform(get("/ratings")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void givenRating_whenCorrectUsername_thenOk()
             throws Exception {
 
@@ -112,6 +126,24 @@ public class RatingControllerTests {
                 .param("size", Integer.toString(size))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$._embedded.ratings", hasSize(ratings.size())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNoRatings_whenCorrectUsername_thenOk()
+            throws Exception {
+
+        int page = 0, size = 10;
+        String username = "john";
+        List<Rating> ratings = new LinkedList<>();
+        Page<Rating> ratingPage = new PageImpl<>(ratings);
+        given(ratingService.findByUser(username, PageRequest.of(0, 10))).willReturn(ratingPage);
+
+        mvc.perform(get("/ratings/user")
+                .param("user", username)
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -142,6 +174,24 @@ public class RatingControllerTests {
                 .param("size", Integer.toString(size))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$._embedded.ratings", hasSize(ratings.size())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNoRatings_whenFindByAlbum_thenOk()
+            throws Exception {
+
+        int page = 0, size = 10;
+        String username = "john";
+        List<Rating> ratings = new LinkedList<>();
+        Page<Rating> ratingPage = new PageImpl<>(ratings);
+        given(ratingService.findByAlbumId(1L, PageRequest.of(0, 10))).willReturn(ratingPage);
+
+        mvc.perform(get("/ratings/album")
+                .param("albumId", "1")
+                .param("page", Integer.toString(page))
+                .param("size", Integer.toString(size))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 

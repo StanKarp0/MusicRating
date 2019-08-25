@@ -102,6 +102,19 @@ public class AlbumControllerTests {
     }
 
     @Test
+    public void givenEmptyAlbums_whenFindAll_thenEmpty()
+            throws Exception {
+
+        Page<Album> albums = new PageImpl<>(Collections.emptyList());
+
+        given(albumService.findAll(PageRequest.of(0, 10))).willReturn(albums);
+
+        mvc.perform(get("/albums")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void givenAlbumId_whenFindAlbum_thenOk()
             throws Exception {
         Performer performer = new Performer("bbb");
@@ -159,15 +172,23 @@ public class AlbumControllerTests {
     }
 
     @Test
-    public void givenQuery_whenFindEmptyQuery_thenNotOk()
+    public void givenEmptyQuery_whenFindQuery_thenOk()
             throws Exception {
         int page = 0, size = 10;
         given(albumService.findByQuery("aaa", PageRequest.of(page, size)))
                 .willReturn(new PageImpl<>(new LinkedList<>()));
 
         mvc.perform(get("/albums/query")
-                .param("page", Integer.toString(page))
-                .param("size", Integer.toString(size))
+                .param("query", "aaa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNoQuery_whenFindQuery_thenNotOk()
+            throws Exception {
+
+        mvc.perform(get("/albums/query")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -220,7 +241,7 @@ public class AlbumControllerTests {
                 .param("page", Integer.toString(page))
                 .param("size", Integer.toString(size))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isOk());
     }
 
     @Test

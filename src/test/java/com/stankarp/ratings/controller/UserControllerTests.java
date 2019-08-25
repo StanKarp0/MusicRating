@@ -56,10 +56,7 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mvc;
-
-//    @Autowired
-//    private ObjectMapper objectMapper;
-
+    
     @MockBean
     private UserRepository userRepository;
 

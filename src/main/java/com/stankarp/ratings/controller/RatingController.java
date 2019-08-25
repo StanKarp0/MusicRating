@@ -31,32 +31,27 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
-    private PagedResources<Resource<Rating>> handleNull(Page<Rating> ratings, String errorMsg,
-                                                        PagedResourcesAssembler<Rating> assembler) {
+    private PagedResources<?> handleNull(Page<Rating> ratings, PagedResourcesAssembler<Rating> assembler) {
         return Optional.ofNullable(ratings)
-                .filter(page -> !page.isEmpty())
-                .map(assembler::toResource)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMsg));
+                .map(page -> page.isEmpty() ? assembler.toEmptyResource(page, Resource.class) : assembler.toResource(page))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No ratings found"));
     }
 
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
-    public PagedResources<Resource<Rating>> all(@PageableDefault Pageable pageable,
-                                                PagedResourcesAssembler<Rating> assembler) {
-        return handleNull(ratingService.findAll(pageable), "No ratings at all", assembler);
+    public PagedResources<?> all(@PageableDefault Pageable pageable, PagedResourcesAssembler<Rating> assembler) {
+        return handleNull(ratingService.findAll(pageable), assembler);
     }
 
     @GetMapping(path={"user"}, produces = {"application/hal+json"})
-    public PagedResources<Resource<Rating>> user(@RequestParam String user,
-                                                 @PageableDefault Pageable pageable,
-                                                 PagedResourcesAssembler<Rating> assembler) {
-        return handleNull(ratingService.findByUser(user, pageable), "No ratings found for username.", assembler);
+    public PagedResources<?> user(@RequestParam String user, @PageableDefault Pageable pageable,
+                                  PagedResourcesAssembler<Rating> assembler) {
+        return handleNull(ratingService.findByUser(user, pageable), assembler);
     }
 
     @GetMapping(path={"album"}, produces = {"application/hal+json"})
-    public PagedResources<Resource<Rating>> album(@RequestParam long albumId,
-                                                  @PageableDefault Pageable pageable,
-                                                  PagedResourcesAssembler<Rating> assembler) {
-        return handleNull(ratingService.findByAlbumId(albumId, pageable), "No ratings for album", assembler);
+    public PagedResources<?> album(@RequestParam long albumId, @PageableDefault Pageable pageable,
+                                   PagedResourcesAssembler<Rating> assembler) {
+        return handleNull(ratingService.findByAlbumId(albumId, pageable), assembler);
     }
 
     @GetMapping(path = "{ratingId:[0-9]+}", produces = {"application/hal+json"})

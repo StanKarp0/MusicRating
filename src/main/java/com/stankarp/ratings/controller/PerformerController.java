@@ -5,6 +5,7 @@ import com.stankarp.ratings.message.request.PerformerForm;
 import com.stankarp.ratings.message.request.PerformerUpdateForm;
 import com.stankarp.ratings.message.response.ResponseMessage;
 import com.stankarp.ratings.service.PerformerService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -30,13 +31,17 @@ public class PerformerController {
         this.performerService = performerService;
     }
 
-    @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
-    public PagedResources<Resource<Performer>> findAll(@PageableDefault Pageable pageable,
-                                                       PagedResourcesAssembler<Performer> assembler) {
-        return Optional.ofNullable(performerService.findAll(pageable))
-                .filter(page -> !page.isEmpty())
-                .map(assembler::toResource)
+
+    private PagedResources<?> handleNull(Page<Performer> performers, PagedResourcesAssembler<Performer> assembler) {
+
+        return Optional.ofNullable(performers)
+                .map(page -> page.isEmpty() ? assembler.toEmptyResource(page, Resource.class) : assembler.toResource(page))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No performers found"));
+    }
+
+    @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
+    public PagedResources<?> findAll(@PageableDefault Pageable pageable, PagedResourcesAssembler<Performer> assembler) {
+        return handleNull(performerService.findAll(pageable), assembler);
     }
 
     @GetMapping(path = "{performerId:[0-9]+}", produces = {"application/hal+json"})
@@ -47,13 +52,9 @@ public class PerformerController {
     }
 
     @GetMapping(path={"query"}, produces = {"application/hal+json"})
-    public PagedResources<Resource<Performer>> query(@RequestParam String query,
-                                                     @PageableDefault Pageable pageable,
-                                                     PagedResourcesAssembler<Performer> assembler) {
-        return Optional.ofNullable(performerService.findByQuery(query, pageable))
-                .filter(page -> !page.isEmpty())
-                .map(assembler::toResource)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No performers found"));
+    public PagedResources<?> query(@RequestParam String query, @PageableDefault Pageable pageable,
+                                   PagedResourcesAssembler<Performer> assembler) {
+        return handleNull(performerService.findByQuery(query, pageable), assembler);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

@@ -15,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -26,20 +28,23 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    private PagedResources<?> handleNull(Page<UserResponse> users, PagedResourcesAssembler<UserResponse> assembler) {
+        return Optional.ofNullable(users)
+                .map(page -> page.isEmpty() ? assembler.toEmptyResource(page, Resource.class) : assembler.toResource(page))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No users found"));
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "", produces = {"application/json"})
-    public PagedResources<Resource<UserResponse>> all(@PageableDefault Pageable pageable,
-                                                      PagedResourcesAssembler<UserResponse> assembler) {
-        Page<UserResponse> page = userRepository.findUserStats(pageable);
-        return assembler.toResource(page);
+    public PagedResources<?> all(@PageableDefault Pageable pageable, PagedResourcesAssembler<UserResponse> assembler) {
+        return handleNull(userRepository.findUserStats(pageable), assembler);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "query", produces = {"application/json"})
-    public PagedResources<Resource<UserResponse>> query(@PageableDefault Pageable pageable, @RequestParam String query,
-                                                        PagedResourcesAssembler<UserResponse> assembler) {
-        Page<UserResponse> page = userRepository.findUserStatsQuery(query, pageable);
-        return assembler.toResource(page);
+    public PagedResources<?> query(@PageableDefault Pageable pageable, @RequestParam String query,
+                                   PagedResourcesAssembler<UserResponse> assembler) {
+        return handleNull(userRepository.findUserStatsQuery(query, pageable), assembler);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
