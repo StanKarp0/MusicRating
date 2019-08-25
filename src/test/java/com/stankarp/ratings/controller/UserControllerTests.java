@@ -56,7 +56,7 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mvc;
-    
+
     @MockBean
     private UserRepository userRepository;
 

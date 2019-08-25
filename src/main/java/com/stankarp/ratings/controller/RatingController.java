@@ -63,8 +63,7 @@ public class RatingController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = {"", "/"}, produces = {"application/json"})
-    public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm,
-                                 Principal principal) {
+    public Resource<Rating> save(@RequestBody @Valid RatingForm ratingForm, Principal principal) {
         return ratingService.save(ratingForm, principal.getName())
                 .map(rating -> new Resource<>(rating))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot save rating"));

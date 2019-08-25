@@ -19,7 +19,6 @@ public class RatingForm {
     @NotNull
     private Long albumId;
 
-    @NotNull
     private Long ratingId;
 
     public RatingForm() {

@@ -13,7 +13,6 @@ public class PerformerForm {
     @Size(min = 1, max = 40)
     private String name;
 
-    @NotEmpty
     private List<PerformerAlbumForm> albums = new LinkedList<>();
 
     public String getName() {

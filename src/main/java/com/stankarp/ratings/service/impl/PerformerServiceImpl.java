@@ -43,6 +43,7 @@ public class PerformerServiceImpl implements PerformerService {
     public Optional<Performer> update(PerformerUpdateForm performerForm) {
         return performerRepository.findById(performerForm.getPerformerId()).map(performer -> {
             performer.setName(performerForm.getName());
+            performerRepository.save(performer);
             return performer;
         });
     }
