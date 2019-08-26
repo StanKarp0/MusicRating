@@ -31,7 +31,6 @@ public class AlbumController {
     }
 
     private PagedResources<?> handleNull(Page<Album> albums, PagedResourcesAssembler<Album> assembler) {
-
         return Optional.ofNullable(albums)
                 .map(page -> page.isEmpty() ? assembler.toEmptyResource(page, Resource.class) : assembler.toResource(page))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No albums found"));
@@ -45,22 +44,19 @@ public class AlbumController {
     }
 
     @GetMapping(path = {"", "/"}, produces = {"application/hal+json"})
-    public PagedResources<?> all(@PageableDefault Pageable pageable,
-                                                PagedResourcesAssembler<Album> assembler) {
+    public PagedResources<?> all(@PageableDefault Pageable pageable, PagedResourcesAssembler<Album> assembler) {
         return handleNull(albumService.findAll(pageable), assembler);
     }
 
     @GetMapping(path={"query"}, produces = {"application/hal+json"})
-    public PagedResources<?> query(@RequestParam String query,
-                                                 @PageableDefault Pageable pageable,
-                                                 PagedResourcesAssembler<Album> assembler) {
+    public PagedResources<?> query(@RequestParam String query, @PageableDefault Pageable pageable,
+                                   PagedResourcesAssembler<Album> assembler) {
         return handleNull(albumService.findByQuery(query, pageable), assembler);
     }
 
     @GetMapping(path={"performer"}, produces = {"application/hal+json"})
-    public PagedResources<?> performer(@RequestParam long performerId,
-                                                     @PageableDefault Pageable pageable,
-                                                     PagedResourcesAssembler<Album> assembler) {
+    public PagedResources<?> performer(@RequestParam long performerId, @PageableDefault Pageable pageable,
+                                       PagedResourcesAssembler<Album> assembler) {
         return handleNull(albumService.findByPerformerId(performerId, pageable), assembler);
     }
 

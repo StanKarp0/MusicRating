@@ -2,11 +2,13 @@ package com.stankarp.ratings.message.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class AlbumForm {
 
     @NotBlank
+    @Size(min = 1, max = 40)
     private String title;
 
     @NotNull
@@ -20,7 +22,7 @@ public class AlbumForm {
     public AlbumForm() {
     }
 
-    public AlbumForm(String title, Integer year, Long performerId, Long albumId) {
+    public AlbumForm(@NotBlank @Size(min = 1, max = 40) String title, @NotNull Integer year, @NotNull Long performerId, Long albumId) {
         this.title = title;
         this.year = year;
         this.performerId = performerId;

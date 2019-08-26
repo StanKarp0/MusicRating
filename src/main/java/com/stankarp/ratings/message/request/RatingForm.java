@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class RatingForm {
 
-    @NotBlank
     private String description = "";
 
     @NotNull
